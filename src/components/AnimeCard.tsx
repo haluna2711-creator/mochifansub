@@ -33,7 +33,7 @@ export function AnimeCard({ r, priority = false }: { r: Release; priority?: bool
         </span>
         {r.total_episodes ? (
           <span className="absolute bottom-2.5 right-2.5 rounded-full bg-black/45 px-2 py-0.5 text-[0.68rem] font-bold text-white backdrop-blur-sm">
-            {r.total_episodes} tập
+            {r.total_episodes} bánh
           </span>
         ) : null}
         <div className="pointer-events-none absolute inset-0 rounded-[var(--radius-mochi)] ring-1 ring-inset ring-white/30" />
