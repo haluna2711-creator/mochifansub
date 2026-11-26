@@ -254,7 +254,7 @@ export function SearchPalette() {
                       <span className="mt-0.5 flex items-center gap-1.5 text-xs text-muted">
                         <span className={`h-2 w-2 shrink-0 rounded-full ${statusDot[it.status]}`} />
                         {STATUS_LABEL[it.status]}
-                        {it.total_episodes ? ` · ${it.total_episodes} tập` : ""}
+                        {it.total_episodes ? ` · ${it.total_episodes} bánh` : ""}
                         {it.year ? ` · ${it.year}` : ""}
                       </span>
                     </span>
