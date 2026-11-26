@@ -90,7 +90,7 @@ export async function POST(req: Request) {
   const text = lines.join("\n");
 
   const html = `<div style="font-family:sans-serif;line-height:1.6;color:#2b1d20">
-<h2 style="margin:0 0 12px">🍡 Báo lỗi bánh: ${esc(title)}</h2>
+<h2 style="margin:0 0 12px">🚩 Báo lỗi bánh: ${esc(title)}</h2>
 <p style="margin:0"><b>Loại lỗi:</b> ${esc(type)}</p>
 ${detail ? `<p style="margin:0"><b>Bản tải:</b> ${esc(detail)}</p>` : ""}
 ${pageUrl ? `<p style="margin:0"><b>Link trang:</b> <a href="${esc(pageUrl)}">${esc(pageUrl)}</a></p>` : ""}
