@@ -6,6 +6,7 @@ import type { ReleaseStatus } from "@/lib/types";
 import { AnimeGrid } from "@/components/AnimeCard";
 import { GenreChips } from "@/components/Section";
 import { SearchBar } from "@/components/SearchBar";
+import { StatusTabs } from "@/components/StatusTabs";
 import { MochiFace } from "@/components/MochiLogo";
 
 export const metadata: Metadata = { title: "Khám phá" };
@@ -48,23 +49,10 @@ export default async function BrowsePage({ searchParams }: { searchParams: SP })
       </div>
 
       <div className="no-scrollbar -mx-4 mt-6 flex gap-1 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-        <div className="inline-flex shrink-0 gap-1 rounded-full bg-surface p-1 ring-1 ring-line">
-          {tabs.map((t) => {
-            const active = t.key === status;
-            return (
-              <Link
-                key={t.label}
-                href={href(t.key)}
-                scroll={false}
-                className={`press whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold ${
-                  active ? "bg-sakura-deep text-white shadow" : "text-muted hover:text-ink"
-                }`}
-              >
-                {t.label}
-              </Link>
-            );
-          })}
-        </div>
+        <StatusTabs
+          active={status}
+          tabs={tabs.map((t) => ({ key: t.key, label: t.label, href: href(t.key) }))}
+        />
       </div>
 
       {genres.length > 0 && (
