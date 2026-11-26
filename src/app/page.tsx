@@ -54,7 +54,7 @@ export default async function HomePage() {
       )}
 
       {completed.length > 0 && (
-        <Section title="Trọn bộ — cày một mạch" jp="完結" href="/browse?status=completed">
+        <Section title="Bánh đủ vị — ăn là ghiền" jp="完結" href="/browse?status=completed">
           <AnimeGrid items={completed} />
         </Section>
       )}
