@@ -14,7 +14,7 @@ export function StaffList({ staff }: { staff: StaffMember[] | null | undefined }
         <h2 id="staff-title" className="font-display text-xl font-black md:text-2xl">Nhân viên tiệm bánh</h2>
       </div>
       <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        {groups.map(({ title, flavor, hint, names }) => (
+        {groups.map(({ title, flavor, names }) => (
           <li
             key={title}
             className="group flex items-center gap-3 rounded-2xl bg-surface p-3.5 ring-1 ring-line transition-colors hover:bg-sakura/10"
@@ -32,7 +32,6 @@ export function StaffList({ staff }: { staff: StaffMember[] | null | undefined }
             <div className="min-w-0">
               <p className="text-[0.68rem] font-extrabold uppercase tracking-wide text-muted">
                 {title}
-                {hint && <span className="font-bold normal-case tracking-normal opacity-70"> · {hint}</span>}
               </p>
               <p className="font-display font-bold leading-snug text-ink [overflow-wrap:anywhere]">
                 {names.join(" · ")}
