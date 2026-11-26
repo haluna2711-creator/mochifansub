@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { MochiFace } from "./MochiLogo";
 
 const TYPES = [
   "Link tải bị hỏng",
@@ -135,9 +136,7 @@ export function ReportButton({
 
               {status === "done" ? (
                 <div className="py-6 text-center">
-                  <p className="text-4xl" aria-hidden>
-                    🍡
-                  </p>
+                  <MochiFace className="animate-wobble mx-auto h-24 w-24 drop-shadow-md" />
                   <h3 className="mt-3 font-display text-xl font-black">Đã gửi báo lỗi!</h3>
                   <p className="mt-2 text-sm text-muted">Cảm ơn bạn, tiệm sẽ kiểm tra lại mẻ bánh này sớm nhất.</p>
                   <button
