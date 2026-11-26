@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="vi"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tiệm Bánh Mochi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<header class="hero" id="hero">
+  <div><h1>Tiệm Bánh Mochi</h1><p>Mùa đông nhỏ xinh, bánh ngọt còn ấm.</p></div>
+  <button class="down" id="down" aria-label="Cuộn xuống trang đăng ký"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+</header>
+
+<main class="gate" id="gate"><div class="card">
+  <!-- Đã đăng nhập -->
+  <section id="vMember" hidden>
+    <h2>Chào <span id="uName"></span>!</h2>
+    <p class="muted">Bạn đã vào tiệm. Tên này sẽ hiện khi bạn bình luận.</p>
+    <button class="btn" id="logout">Đăng xuất</button>
+  </section>
+
+  <!-- Đăng ký -->
+  <section id="vSignup">
+    <h2>Tạo tài khoản</h2>
+    <span class="quota" id="quota">Đang kiểm tra lượt…</span>
+    <div class="closed" id="closed" hidden>Hôm nay tiệm đã đủ khách. Vui lòng ghé tiệm bánh vào ngày mai.</div>
+    <form id="fSignup">
+      <label for="sEmail">Email</label><input id="sEmail" type="email" required autocomplete="email">
+      <label for="sUser">Tên của bạn (hiện khi bình luận)</label><input id="sUser" type="text" required minlength="3" maxlength="24" pattern="[\p{L}0-9_ ]{3,24}" autocomplete="nickname">
+      <label for="sPass">Mật khẩu</label><input id="sPass" type="password" required minlength="8" autocomplete="new-password">
+      <label class="chk"><input type="checkbox" id="sTerms"><span>Tôi đã đọc và đồng ý với <button type="button" class="link" id="openTerms">quy định người dùng</button></span></label>
+      <button class="btn" id="bSignup" disabled>Tạo tài khoản</button>
+    </form>
+    <div class="row"><span>Đã có tài khoản?</span><button class="link" data-go="vLogin">Đăng nhập</button></div>
+  </section>
+
+  <!-- Đăng nhập -->
+  <section id="vLogin" hidden>
+    <h2>Đăng nhập</h2><p class="muted">Chào mừng bạn quay lại tiệm.</p>
+    <form id="fLogin">
+      <label for="lEmail">Email</label><input id="lEmail" type="email" required autocomplete="email">
+      <label for="lPass">Mật khẩu</label><input id="lPass" type="password" required autocomplete="current-password">
+      <button class="btn">Đăng nhập</button>
+    </form>
+    <div class="row"><button class="link" data-go="vForgot">Quên mật khẩu?</button><button class="link" data-go="vSignup">Tạo tài khoản mới</button></div>
+  </section>
+
+  <!-- Quên mật khẩu -->
+  <section id="vForgot" hidden>
+    <h2>Quên mật khẩu</h2><p class="muted">Nhập email, tiệm sẽ gửi liên kết đặt lại mật khẩu.</p>
+    <form id="fForgot"><label for="fEmail">Email</label><input id="fEmail" type="email" required><button class="btn">Gửi liên kết</button></form>
+    <div class="row"><button class="link" data-go="vLogin">Quay lại đăng nhập</button></div>
+  </section>
+
+  <!-- Đặt mật khẩu mới (từ email) -->
+  <section id="vReset" hidden>
+    <h2>Mật khẩu mới</h2>
+    <form id="fReset"><label for="nPass">Mật khẩu mới</label><input id="nPass" type="password" required minlength="8" autocomplete="new-password"><button class="btn">Lưu mật khẩu</button></form>
+  </section>
+  <div class="msg" id="msg" role="status"></div>
+</div></main>
+
+<dialog id="terms">
+  <h2 style="font-family:Fraunces,serif;margin-top:0">Quy định người dùng</h2>
+  <ol>
+    <li>Mỗi ngày tiệm chỉ nhận <b>10</b> tài khoản mới. Hết lượt, vui lòng quay lại vào ngày mai.</li>
+    <li>Tài khoản đăng ký nhưng <b>không đăng nhập trong 1 tháng</b> sẽ bị xóa.</li>
+    <li>Tài khoản <b>2 năm không đăng nhập</b> sẽ bị khóa. Email đã khóa không thể đăng ký lại.</li>
+    <li>Dữ liệu tài khoản bị khóa sẽ được xóa hẳn sau <b>5 năm</b>.</li>
+    <li>Bình luận văn minh, không spam, không xúc phạm người khác.</li>
+  </ol>
+  <button class="btn" id="agree">Tôi đồng ý</button>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+const C = window.MOCHI, sb = supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY);
+const $ = id => document.getElementById(id);
+const views = ["vMember","vSignup","vLogin","vForgot","vReset"];
+const show = v => { views.forEach(x => $(x).hidden = x !== v); msg(""); };
+function msg(t, ok){ const m=$("msg"); m.className="msg"+(t?(ok?" ok":" err"):""); m.textContent=t||""; }
+
+// Nền: lấy từ site_settings (admin đổi được)
+(async()=>{
+  let url = C.DEFAULT_BG;
+  try{ const {data}=await sb.from("site_settings").select("value").eq("key","background_url").maybeSingle(); if(data?.value) url=data.value; }catch{}
+  $("hero").style.backgroundImage=`url("${url}")`;
+})();
+
+$("down").onclick = () => $("gate").scrollIntoView({behavior:"smooth"});
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => show(b.dataset.go));
+
+// Lượt đăng ký trong ngày
+async function loadQuota(){
+  const {data,error}=await sb.rpc("signup_status");
+  if(error){ $("quota").textContent=""; return; }
+  const left=data.remaining, full=left<=0;
+  $("quota").textContent = full ? "Hết lượt hôm nay" : `Hôm nay còn ${left}/${data.limit} lượt`;
+  $("closed").hidden=!full; $("fSignup").hidden=full;
+}
+loadQuota();
+
+// Quy định
+$("openTerms").onclick = () => $("terms").showModal();
+$("agree").onclick = () => { $("sTerms").checked=true; $("bSignup").disabled=false; $("terms").close(); };
+$("sTerms").onchange = e => $("bSignup").disabled = !e.target.checked;
+
+$("fSignup").onsubmit = async e => {
+  e.preventDefault(); $("bSignup").disabled=true;
+  const email=$("sEmail").value.trim(), username=$("sUser").value.trim();
+  const {data:st}=await sb.rpc("check_signup",{p_email:email,p_username:username});
+  const errs={full:"Hôm nay tiệm đã đủ khách. Vui lòng ghé tiệm bánh vào ngày mai.",blocked:"Email này đã bị khóa, không thể đăng ký lại.",taken:"Tên này đã có người dùng. Hãy chọn tên khác.",exists:"Email này đã có tài khoản. Hãy đăng nhập."};
+  if(st && st!=="ok"){ msg(errs[st]||"Không thể đăng ký lúc này."); $("bSignup").disabled=false; loadQuota(); return; }
+  const {error}=await sb.auth.signUp({email,password:$("sPass").value,options:{data:{username},emailRedirectTo:location.href.split("#")[0]}});
+  if(error){ msg("Đăng ký chưa được: "+error.message); $("bSignup").disabled=false; return; }
+  msg("Đã tạo tài khoản! Hãy kiểm tra email để xác nhận, rồi đăng nhập.", true);
+  $("fSignup").reset(); loadQuota();
+};
+
+$("fLogin").onsubmit = async e => {
+  e.preventDefault();
+  const {error}=await sb.auth.signInWithPassword({email:$("lEmail").value.trim(),password:$("lPass").value});
+  if(error) msg("Email hoặc mật khẩu chưa đúng, hoặc tài khoản đã bị khóa.");
+};
+$("fForgot").onsubmit = async e => {
+  e.preventDefault();
+  const {error}=await sb.auth.resetPasswordForEmail($("fEmail").value.trim(),{redirectTo:location.href.split("#")[0]});
+  error ? msg("Chưa gửi được: "+error.message) : msg("Đã gửi liên kết. Hãy kiểm tra email.", true);
+};
+$("fReset").onsubmit = async e => {
+  e.preventDefault();
+  const {error}=await sb.auth.updateUser({password:$("nPass").value});
+  error ? msg(error.message) : (msg("Đã đổi mật khẩu.", true), setTimeout(()=>show("vMember"),800));
+};
+$("logout").onclick = () => sb.auth.signOut();
+
+// Trạng thái đăng nhập
+async function render(session){
+  if(!session){ show("vSignup"); return; }
+  const {data}=await sb.from("profiles").select("username").eq("id",session.user.id).maybeSingle();
+  $("uName").textContent = data?.username || session.user.user_metadata?.username || "bạn";
+  show("vMember");
+}
+sb.auth.onAuthStateChange((ev,session)=>{ ev==="PASSWORD_RECOVERY" ? show("vReset") : render(session); });
+</script>
+</body></html>
