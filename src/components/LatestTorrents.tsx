@@ -47,7 +47,7 @@ export function LatestTorrents({ items }: { items: TorrentWithRelease[] }) {
               <span>{timeAgo(t.created_at)}</span>
             </div>
           </div>
-          <TorrentActions magnet={t.magnet} torrentUrl={t.torrent_url} compact />
+          <TorrentActions magnet={t.magnet} torrentUrl={t.torrent_url} releaseId={t.release_id} compact />
         </li>
       ))}
     </ul>

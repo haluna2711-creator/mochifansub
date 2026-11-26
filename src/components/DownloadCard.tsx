@@ -42,7 +42,7 @@ export function DownloadCard({ torrent }: { torrent: Torrent | null }) {
           </div>
         </div>
         <div className="shrink-0">
-          <TorrentActions magnet={torrent.magnet} torrentUrl={torrent.torrent_url} />
+          <TorrentActions magnet={torrent.magnet} torrentUrl={torrent.torrent_url} releaseId={torrent.release_id} />
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { getBrowserSupabase } from "@/lib/supabase";
 import { IconCheck, IconCopy, IconDownload, IconMagnet } from "./Icons";
 
 function Toast({ text }: { text: string }) {
@@ -18,13 +19,31 @@ function Toast({ text }: { text: string }) {
   );
 }
 
+/** Mỗi trình duyệt chỉ tính 1 lượt tải / phim / 24 giờ để tránh bấm nhiều lần làm sai số liệu. */
+function countDownload(releaseId?: string) {
+  if (!releaseId) return;
+  const key = `mochi-dl-${releaseId}`;
+  try {
+    const last = Number(localStorage.getItem(key) ?? 0);
+    if (Date.now() - last < 24 * 3600 * 1000) return;
+    localStorage.setItem(key, String(Date.now()));
+  } catch {}
+  getBrowserSupabase()
+    ?.rpc("increment_download", { p_release_id: releaseId })
+    .then(({ error }) => {
+      if (error) console.warn("increment_download", error.message);
+    });
+}
+
 export function TorrentActions({
   magnet,
   torrentUrl,
+  releaseId,
   compact = false,
 }: {
   magnet: string | null;
   torrentUrl: string | null;
+  releaseId?: string;
   compact?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
@@ -54,6 +73,7 @@ export function TorrentActions({
       {magnet && (
         <a
           href={magnet}
+          onClick={() => countDownload(releaseId)}
           className={`${btn} ${size} bg-sakura-deep text-white shadow-[0_6px_16px_-6px] shadow-sakura-deep/60 hover:brightness-110`}
           title="Mở bằng uTorrent / qBittorrent"
         >
@@ -63,6 +83,7 @@ export function TorrentActions({
       {torrentUrl && (
         <a
           href={torrentUrl}
+          onClick={() => countDownload(releaseId)}
           className={`${btn} ${size} bg-matcha text-white hover:brightness-105`}
           title="Tải file .torrent"
           rel="nofollow noopener"
