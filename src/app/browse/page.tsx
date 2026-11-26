@@ -39,7 +39,7 @@ export default async function BrowsePage({ searchParams }: { searchParams: SP })
   return (
     <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 md:pt-8">
       <div className="animate-rise">
-        <h1 className="font-display text-3xl font-black tracking-tight md:text-4xl">Khám phá kho phim</h1>
+        <h1 className="font-display text-3xl font-black tracking-tight md:text-4xl">Tham quan tiệm bánh</h1>
       </div>
 
       <div className="mt-6 max-w-2xl">
