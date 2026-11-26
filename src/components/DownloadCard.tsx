@@ -2,7 +2,7 @@ import type { Torrent } from "@/lib/types";
 import { timeAgo } from "@/lib/utils";
 import { QualityBadge } from "./LatestTorrents";
 import { TorrentActions } from "./TorrentActions";
-import { MochiFace } from "./MochiLogo";
+import { SteamingMochi } from "./SteamingMochi";
 import { IconDownload } from "./Icons";
 
 /** Thẻ tải duy nhất của một bộ phim. */
@@ -10,7 +10,7 @@ export function DownloadCard({ torrent }: { torrent: Torrent | null }) {
   if (!torrent) {
     return (
       <div className="flex flex-col items-center rounded-[2rem] bg-surface py-12 text-center ring-1 ring-line">
-        <MochiFace className="animate-wobble h-16 w-16" />
+        <SteamingMochi className="h-24 w-24" />
         <p className="mt-3 font-display font-extrabold">Bánh đang hấp…</p>
         <p className="text-sm text-muted">Chưa có link tải. Quay lại sau nhé!</p>
       </div>
