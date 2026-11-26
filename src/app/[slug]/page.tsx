@@ -11,6 +11,7 @@ import { AnimeCard } from "@/components/AnimeCard";
 import { Section } from "@/components/Section";
 import { IconChevron } from "@/components/Icons";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { CommentSection } from "@/components/CommentSection";
 
 export const revalidate = 60;
 
@@ -137,6 +138,8 @@ export default async function AnimePage({ params }: { params: Params }) {
                 <DownloadCard torrent={null} />
               )}
             </div>
+
+            <CommentSection releaseId={r.id} />
           </div>
         </div>
 
