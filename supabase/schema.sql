@@ -1,5 +1,5 @@
 -- =====================================================================
---  Mochi Fansub — Supabase schema
+--  Tiệm bánh Mochi — Supabase schema
 --  Chạy toàn bộ file này trong Supabase Dashboard → SQL Editor → New query
 -- =====================================================================
 
