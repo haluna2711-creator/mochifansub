@@ -12,6 +12,7 @@ import { IconEdit, IconPlus, IconSearch } from "@/components/Icons";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button, Field, Spinner, inputCls } from "./ui";
 import { ReleaseEditor } from "./ReleaseEditor";
+import { BackgroundSettings } from "./BackgroundSettings";
 
 type AdminState = "loading" | "anon" | "not-admin" | "admin";
 
@@ -136,6 +137,7 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [editing, setEditing] = useState<Release | "new" | null>(null);
+  const [bgOpen, setBgOpen] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -164,6 +166,9 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
           <div className="ml-auto flex items-center gap-2">
             <span className="hidden text-sm text-muted sm:inline">{email}</span>
             <ThemeToggle />
+            <Button variant="ghost" className="h-10 px-4" onClick={() => setBgOpen(true)}>
+              Nền trang
+            </Button>
             <Button variant="ghost" className="h-10 px-4" onClick={() => sb.auth.signOut()}>
               Thoát
             </Button>
@@ -227,6 +232,8 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
           </div>
         )}
       </div>
+
+      {bgOpen && <BackgroundSettings sb={sb} onClose={() => setBgOpen(false)} />}
 
       {editing && (
         <ReleaseEditor
