@@ -75,10 +75,10 @@ export default async function BrowsePage({ searchParams }: { searchParams: SP })
       ) : (
         <div className="flex flex-col items-center rounded-[2rem] bg-surface py-16 text-center ring-1 ring-line">
           <MochiFace className="animate-wobble h-20 w-20" mood="sad" />
-          <p className="mt-4 font-display text-lg font-extrabold">Không tìm thấy phim nào</p>
-          <p className="mt-1 text-sm text-muted">Thử từ khoá khác hoặc bỏ bớt bộ lọc nhé.</p>
+          <p className="mt-4 font-display text-lg font-extrabold">Tiệm chưa có loại bánh này</p>
+          <p className="mt-1 text-sm text-muted">Thử hỏi loại bánh khác hoặc bỏ bớt bộ lọc nhé.</p>
           <Link href="/browse" className="press mt-5 rounded-full bg-sakura-deep px-5 py-2.5 text-sm font-extrabold text-white">
-            Xoá bộ lọc
+            Xem lại tủ bánh	
           </Link>
         </div>
       )}
