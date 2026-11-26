@@ -102,7 +102,7 @@ export function HeroCarousel({ items }: { items: Release[] }) {
                   href={`/anime/${r.slug}`}
                   className="press mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-extrabold text-[#3b2a2e] shadow-lg hover:bg-sakura hover:text-white"
                 >
-                  Tải ngay <IconArrow />
+                  Mua ngay <IconArrow />
                 </Link>
               </div>
 
