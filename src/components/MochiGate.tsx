@@ -7,7 +7,7 @@ type Phase = "idle" | "wrapping" | "ready";
 
 /**
  * Cổng "mua bánh": ẩn khu vực tải xuống sau một cục mochi.
- * Rê chuột → "Ấn vào tui để mua bánh" · bấm → "Đang gói bánh…" đếm 30 giây
+ * Rê chuột → "Ấn vào tui để mua bánh" · bấm → "Đang gói bánh vào túi…" đếm 30 giây
  * · xong → "Cầm bánh về" và hiện phần tải xuống (children).
  */
 export function MochiGate({ children, seconds = 30 }: { children: React.ReactNode; seconds?: number }) {
@@ -103,7 +103,7 @@ export function MochiGate({ children, seconds = 30 }: { children: React.ReactNod
           <span aria-hidden className="mg-spark absolute -left-4 top-1 text-lg">✨</span>
           <span aria-hidden className="mg-spark absolute -right-4 top-6 text-base" style={{ animationDelay: ".7s" }}>✨</span>
         </div>
-        <p role="status" className="relative mt-4 font-display text-lg font-black">Đang gói bánh…</p>
+        <p role="status" className="relative mt-4 font-display text-lg font-black">Đang gói bánh vào túi…</p>
         <div
           role="progressbar"
           aria-valuemin={0}
