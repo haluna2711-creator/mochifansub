@@ -9,18 +9,17 @@ export function Footer() {
           <MochiFace className="animate-wobble h-14 w-14" />
           <div>
             <p className="font-display text-lg font-extrabold">Mochi Fansub</p>
-            <p className="text-sm text-muted">Mềm, dẻo, ngọt — như bánh mochi vừa ra lò.</p>
+            <p className="text-sm text-muted">Dẻo thơm như bánh mochi vừa ra lò.</p>
           </div>
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-muted">
           <Link href="/browse" className="hover:text-sakura-deep">Khám phá</Link>
           <Link href="/browse?status=ongoing" className="hover:text-sakura-deep">Đang tiến hành</Link>
           <Link href="/browse?status=completed" className="hover:text-sakura-deep">Hoàn thành</Link>
-          <Link href="/admin" className="hover:text-sakura-deep">Quản trị</Link>
         </div>
       </div>
       <p className="mx-auto max-w-7xl px-4 text-xs text-muted sm:px-6">
-        © {new Date().getFullYear()} Mochi Fansub · Sản phẩm phi lợi nhuận của nhóm dịch. Hãy ủng hộ bản quyền chính thức khi có thể.
+        © {new Date().getFullYear()} Mochi Fansub · Sản phẩm phi lợi nhuận của nhóm dịch. Hãy ủng hộ bản quyền chính thức khi có thể. Xin cảm ơn.
       </p>
     </footer>
   );
