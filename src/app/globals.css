@@ -1,0 +1,213 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------
+   Bảng màu "Mochi": kem gạo, hồng sakura, xanh matcha, vàng kinako
+   ------------------------------------------------------------------ */
+:root {
+  --bg: #fff8f1;
+  --bg-2: #fdeee6;
+  --surface: #ffffff;
+  --surface-2: #fff3ec;
+  --ink: #3b2a2e;
+  --muted: #8a7176;
+  --line: #f1dfd8;
+  --sakura: #f4a7b9;
+  --sakura-deep: #e06b8a;
+  --matcha: #8fb873;
+  --matcha-deep: #5b8a45;
+  --kinako: #f1d9a7;
+  --yuzu: #f6cf5a;
+  --azuki: #8e4152;
+  --shadow: 122 62 72;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #1c1517;
+  --bg-2: #241b1e;
+  --surface: #2a2023;
+  --surface-2: #33272b;
+  --ink: #fbeef0;
+  --muted: #b89ea4;
+  --line: #3e2f34;
+  --sakura: #f19bb1;
+  --sakura-deep: #f17d9c;
+  --matcha: #a3cc85;
+  --matcha-deep: #b8dc9c;
+  --kinako: #6b5536;
+  --yuzu: #f6cf5a;
+  --azuki: #f7a8b8;
+  --shadow: 0 0 0;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-sakura: var(--sakura);
+  --color-sakura-deep: var(--sakura-deep);
+  --color-matcha: var(--matcha);
+  --color-matcha-deep: var(--matcha-deep);
+  --color-kinako: var(--kinako);
+  --color-yuzu: var(--yuzu);
+  --color-azuki: var(--azuki);
+
+  --font-sans: "Nunito", "M PLUS Rounded 1c", system-ui, sans-serif;
+  --font-display: "M PLUS Rounded 1c", "Nunito", system-ui, sans-serif;
+  --font-jp: "Zen Maru Gothic", "M PLUS Rounded 1c", sans-serif;
+
+  --ease-mochi: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --radius-mochi: 1.75rem;
+}
+
+/* ------------------------------------------------------------------ */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+/* Nền chấm bi + đốm màu mềm như bột gạo */
+.mochi-bg {
+  background-image:
+    radial-gradient(circle at 12% 8%, color-mix(in oklab, var(--sakura) 28%, transparent) 0, transparent 38%),
+    radial-gradient(circle at 92% 22%, color-mix(in oklab, var(--matcha) 22%, transparent) 0, transparent 34%),
+    radial-gradient(color-mix(in oklab, var(--muted) 14%, transparent) 1px, transparent 1.2px);
+  background-size: 100% 900px, 100% 900px, 22px 22px;
+  background-repeat: no-repeat, no-repeat, repeat;
+}
+
+.shadow-mochi {
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.6) inset,
+    0 14px 34px -16px rgb(var(--shadow) / 0.35),
+    0 4px 10px -6px rgb(var(--shadow) / 0.18);
+}
+.dark .shadow-mochi {
+  box-shadow: 0 14px 34px -16px rgb(0 0 0 / 0.7), 0 0 0 1px var(--line);
+}
+
+/* Hiệu ứng "nhún" kiểu bánh mochi */
+.squish {
+  transition: transform 0.45s var(--ease-mochi), box-shadow 0.3s ease;
+  will-change: transform;
+}
+@media (hover: hover) {
+  .squish:hover {
+    transform: translateY(-6px) scale(1.02);
+  }
+}
+.squish:active {
+  transform: scale(0.96, 0.94);
+  transition-duration: 0.12s;
+}
+
+.press:active {
+  transform: scale(0.94);
+}
+.press {
+  transition: transform 0.25s var(--ease-mochi), background-color 0.2s, color 0.2s;
+}
+
+/* Cuộn ngang mượt có snap */
+.snap-row {
+  display: grid;
+  grid-auto-flow: column;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.snap-row::-webkit-scrollbar {
+  display: none;
+}
+.snap-row > * {
+  scroll-snap-align: start;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Grid lớn: bỏ qua render phần ngoài màn hình → lướt nhẹ hơn trên mobile */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 420px;
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 0%, var(--bg-2) 50%, var(--surface-2) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Mochi lắc nhẹ */
+@keyframes wobble {
+  0%, 100% { transform: scale(1, 1) translateY(0); }
+  30% { transform: scale(1.06, 0.94) translateY(2px); }
+  60% { transform: scale(0.97, 1.03) translateY(-2px); }
+}
+.animate-wobble {
+  animation: wobble 2.6s var(--ease-mochi) infinite;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-rise {
+  animation: rise 0.6s var(--ease-mochi) both;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 16px) scale(0.9); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+input, textarea, select { font: inherit; }
+:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--sakura-deep) 60%, transparent);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
