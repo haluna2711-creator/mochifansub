@@ -12,6 +12,7 @@ import { Section } from "@/components/Section";
 import { IconChevron } from "@/components/Icons";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { CommentSection } from "@/components/CommentSection";
+import { ReportButton } from "@/components/ReportButton";
 
 export const revalidate = 60;
 
@@ -123,9 +124,19 @@ export default async function AnimePage({ params }: { params: Params }) {
             )}
 
             <div className="mt-8 text-left">
-              <div className="mb-4 flex items-center gap-3">
-                <span className="h-8 w-2.5 rounded-full bg-gradient-to-b from-matcha to-matcha-deep" aria-hidden />
-                <h2 className="font-display text-xl font-black md:text-2xl">Mua bánh ở đây</h2>
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="h-8 w-2.5 rounded-full bg-gradient-to-b from-matcha to-matcha-deep" aria-hidden />
+                  <h2 className="font-display text-xl font-black md:text-2xl">Mua bánh ở đây</h2>
+                </div>
+                <ReportButton
+                  title={r.title}
+                  detail={
+                    torrent
+                      ? [torrent.label, torrent.quality, torrent.sub_type, torrent.size].filter(Boolean).join(" · ")
+                      : undefined
+                  }
+                />
               </div>
               {torrent ? (
                 <MochiGate key={r.id}>
