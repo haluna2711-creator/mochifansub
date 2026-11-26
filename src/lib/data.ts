@@ -1,7 +1,7 @@
 import { getServerSupabase } from "./supabase";
 import { demoReleases, demoTorrents } from "./demo";
 import { normalize } from "./utils";
-import type { Release, ReleaseStatus, ReleaseWithTorrents, TorrentWithRelease } from "./types";
+import type { Release, ReleaseStatus, ReleaseWithTorrents, Torrent, TorrentWithRelease } from "./types";
 
 export interface ReleaseQuery {
   q?: string;
