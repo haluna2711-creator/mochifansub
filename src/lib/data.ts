@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { getServerSupabase } from "./supabase";
 import { demoReleases, demoTorrents } from "./demo";
 import { normalize } from "./utils";
@@ -95,12 +96,26 @@ export async function getLatestTorrents(limit = 10): Promise<TorrentWithRelease[
   return (data ?? []) as TorrentWithRelease[];
 }
 
-export async function getAllGenres(): Promise<string[]> {
-  const list = await getReleases({ limit: 500 });
+function countGenres(lists: string[][]): string[] {
   const counts = new Map<string, number>();
-  list.forEach((r) => r.genres.forEach((g) => counts.set(g, (counts.get(g) ?? 0) + 1)));
+  lists.forEach((gs) => gs.forEach((g) => counts.set(g, (counts.get(g) ?? 0) + 1)));
   return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([g]) => g);
 }
+
+async function loadGenres(): Promise<string[]> {
+  const sb = getServerSupabase();
+  if (!sb) return countGenres(demoReleases.map((r) => r.genres));
+  // Chỉ lấy cột genres (nhẹ hơn nhiều so với tải cả synopsis, banner...)
+  const { data, error } = await sb.from("releases").select("genres").limit(500);
+  if (error) {
+    console.error("getAllGenres", error.message);
+    return [];
+  }
+  return countGenres((data ?? []).map((r) => (r.genres as string[] | null) ?? []));
+}
+
+// Danh sách thể loại ít đổi → cache 5 phút, không cần hỏi Supabase mỗi lần bấm tab
+export const getAllGenres = unstable_cache(loadGenres, ["all-genres"], { revalidate: 300 });
 
 export async function getAllSlugs(): Promise<{ slug: string; updated_at: string }[]> {
   const sb = getServerSupabase();
