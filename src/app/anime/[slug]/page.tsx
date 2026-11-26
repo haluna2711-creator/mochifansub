@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { slug } = await params;
   const r = await getRelease(slug);
   if (!r) return { title: "Không tìm thấy" };
-  const desc = r.synopsis?.slice(0, 160) ?? `Tải ${r.title} Vietsub — Mochi Fansub`;
+  const desc = r.synopsis?.slice(0, 160) ?? `Tải ${r.title} Bánh chín — Tiệm bánh Mochi`;
   return {
     title: `${r.title} Vietsub`,
     description: desc,
