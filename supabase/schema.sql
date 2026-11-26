@@ -32,7 +32,7 @@ create index if not exists releases_featured_idx on public.releases (featured) w
 create index if not exists releases_genres_idx   on public.releases using gin (genres);
 
 -- ---------------------------------------------------------------------
--- Bảng link torrent (mỗi tập / batch là 1 dòng)
+-- Bảng link torrent (mỗi phim đúng 1 dòng)
 -- ---------------------------------------------------------------------
 create table if not exists public.torrents (
   id          uuid primary key default gen_random_uuid(),
@@ -48,7 +48,9 @@ create table if not exists public.torrents (
   constraint torrents_has_link check (magnet is not null or torrent_url is not null)
 );
 
-create index if not exists torrents_release_idx on public.torrents (release_id, episode desc);
+-- Mỗi phim chỉ có đúng 1 link torrent
+alter table public.torrents drop constraint if exists torrents_one_per_release;
+alter table public.torrents add constraint torrents_one_per_release unique (release_id);
 create index if not exists torrents_created_idx on public.torrents (created_at desc);
 
 -- ---------------------------------------------------------------------
@@ -90,7 +92,7 @@ begin
 end $$;
 
 drop trigger if exists torrents_bump on public.torrents;
-create trigger torrents_bump after insert on public.torrents
+create trigger torrents_bump after insert or update on public.torrents
 for each row execute function public.bump_release_on_torrent();
 
 -- ---------------------------------------------------------------------
@@ -114,6 +116,13 @@ create policy "admin write torrents" on public.torrents for all
 
 drop policy if exists "admin read self" on public.admins;
 create policy "admin read self" on public.admins for select using (user_id = auth.uid());
+
+-- Cho phép Data API truy cập bảng (quyền ghi vẫn do RLS ở trên quyết định)
+grant usage on schema public to anon, authenticated;
+grant select on public.releases, public.torrents to anon, authenticated;
+grant insert, update, delete on public.releases, public.torrents to authenticated;
+grant select on public.admins to authenticated;
+grant execute on function public.is_admin() to anon, authenticated;
 
 -- ---------------------------------------------------------------------
 -- Storage bucket cho ảnh poster / banner
