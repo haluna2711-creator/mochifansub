@@ -63,11 +63,19 @@ export async function getRelease(slug: string): Promise<ReleaseWithTorrents | nu
     if (!r) return null;
     return { ...r, torrents: demoTorrents.filter((t) => t.release_id === r.id) };
   }
-  const { data, error } = await sb
+  let { data, error } = await sb
     .from("releases")
-    .select(`${RELEASE_COLS}, torrents(*)`)
+    .select(`${RELEASE_COLS}, staff, torrents(*)`)
     .eq("slug", slug)
     .maybeSingle();
+  if (error) {
+    // Chưa chạy supabase/add-staff.sql (chưa có cột staff) → thử lại không có staff để trang không bị lỗi
+    ({ data, error } = await sb
+      .from("releases")
+      .select(`${RELEASE_COLS}, torrents(*)`)
+      .eq("slug", slug)
+      .maybeSingle());
+  }
   if (error) console.error("getRelease", error.message);
   if (!data) return null;
   // Mỗi phim 1 link → Supabase trả về object hoặc null thay vì mảng; chuẩn hoá về mảng
