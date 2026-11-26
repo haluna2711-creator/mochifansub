@@ -6,6 +6,7 @@ import { STATUS_LABEL } from "@/lib/utils";
 import { Cover } from "@/components/Cover";
 import { DownloadCard } from "@/components/DownloadCard";
 import { StaffList } from "@/components/StaffList";
+import { MochiGate } from "@/components/MochiGate";
 import { AnimeCard } from "@/components/AnimeCard";
 import { Section } from "@/components/Section";
 import { IconChevron } from "@/components/Icons";
@@ -40,6 +41,8 @@ export default async function AnimePage({ params }: { params: Params }) {
   const related = r.genres[0]
     ? (await getReleases({ genre: r.genres[0], limit: 7 })).filter((x) => x.id !== r.id).slice(0, 6)
     : [];
+
+  const torrent = r.torrents?.[0] ?? null;
 
   const meta = [
     r.year && `${r.season ? `${r.season} ` : ""}${r.year}`,
@@ -119,12 +122,18 @@ export default async function AnimePage({ params }: { params: Params }) {
             <div className="mt-8 text-left">
               <div className="mb-4 flex items-center gap-3">
                 <span className="h-8 w-2.5 rounded-full bg-gradient-to-b from-matcha to-matcha-deep" aria-hidden />
-                <h2 className="font-display text-xl font-black md:text-2xl">Link tải</h2>
+                <h2 className="font-display text-xl font-black md:text-2xl">Mua bánh ở đây</h2>
               </div>
-              <DownloadCard torrent={r.torrents?.[0] ?? null} />
-              <p className="mt-3 text-xs text-muted">
-                Mẹo: dùng qBittorrent hoặc uTorrent. Nhấn <b>Magnet</b> để mở trực tiếp, hoặc sao chép link.
-              </p>
+              {torrent ? (
+                <MochiGate key={r.id}>
+                  <DownloadCard torrent={torrent} />
+                  <p className="mt-3 text-xs text-muted">
+                    Mẹo: dùng qBittorrent hoặc uTorrent. Nhấn <b>Magnet</b> để mở trực tiếp, hoặc sao chép link.
+                  </p>
+                </MochiGate>
+              ) : (
+                <DownloadCard torrent={null} />
+              )}
             </div>
           </div>
         </div>
