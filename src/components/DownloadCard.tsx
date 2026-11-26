@@ -12,7 +12,7 @@ export function DownloadCard({ torrent }: { torrent: Torrent | null }) {
       <div className="flex flex-col items-center rounded-[2rem] bg-surface py-12 text-center ring-1 ring-line">
         <SteamingMochi className="h-24 w-24" />
         <p className="mt-3 font-display font-extrabold">Bánh đang hấp…</p>
-        <p className="text-sm text-muted">Chưa có link tải. Quay lại sau nhé!</p>
+        <p className="text-sm text-muted">Bánh chưa có chín. Quay lại sau nhé!</p>
       </div>
     );
   }
