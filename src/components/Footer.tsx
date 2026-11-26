@@ -9,7 +9,7 @@ export function Footer() {
           <MochiFace className="animate-wobble h-14 w-14" />
           <div>
             <p className="font-display text-lg font-extrabold">Mochi Fansub</p>
-            <p className="text-sm text-muted">Dẻo thơm như bánh mochi vừa ra lò.</p>
+            <p className="text-sm text-muted">Dẻo thơm một hạt, đắng cay muôn phần.</p>
           </div>
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-muted">
