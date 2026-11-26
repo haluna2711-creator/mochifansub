@@ -191,7 +191,7 @@ export function ReleaseEditor({
                 <Field label="Tên tiếng Nhật">
                   <input className={`${inputCls} font-jp`} value={f.title_jp} onChange={(e) => set("title_jp", e.target.value)} placeholder="四月の桜" />
                 </Field>
-                <Field label="Slug (đường dẫn)" hint={`/anime/${slugify(f.slug || f.title) || "..."}`}>
+                <Field label="Slug (đường dẫn)" hint={`/${slugify(f.slug || f.title) || "..."}`}>
                   <input
                     className={inputCls}
                     value={f.slug}
@@ -324,7 +324,7 @@ export function ReleaseEditor({
               </Button>
               {release && (
                 <>
-                  <a href={`/anime/${release.slug}`} target="_blank" className="press inline-flex h-11 items-center rounded-full bg-surface px-5 text-sm font-extrabold ring-1 ring-line">
+                  <a href={`/${release.slug}`} target="_blank" className="press inline-flex h-11 items-center rounded-full bg-surface px-5 text-sm font-extrabold ring-1 ring-line">
                     Xem trang ↗
                   </a>
                   <Button type="button" variant="danger" className="ml-auto" onClick={remove} disabled={busy}>
