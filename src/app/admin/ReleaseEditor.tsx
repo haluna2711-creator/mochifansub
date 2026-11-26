@@ -24,7 +24,6 @@ type Form = {
   season: string;
   status: ReleaseStatus;
   total_episodes: string;
-  featured: boolean;
   staff: StaffMember[];
 };
 
@@ -40,7 +39,6 @@ const toForm = (r: Release | null): Form => ({
   season: r?.season ?? "",
   status: r?.status ?? "ongoing",
   total_episodes: r?.total_episodes?.toString() ?? "",
-  featured: r?.featured ?? false,
   staff: (r?.staff ?? []).map((m) => ({ role: m.role, name: m.name })),
 });
 
@@ -121,7 +119,6 @@ export function ReleaseEditor({
       season: f.season || null,
       status: f.status,
       total_episodes: f.total_episodes ? Number(f.total_episodes) : null,
-      featured: f.featured,
       staff: f.staff
         .map((m) => ({ role: m.role.trim() || "Khác", name: m.name.trim() }))
         .filter((m) => m.name),
@@ -314,13 +311,6 @@ export function ReleaseEditor({
               </span>
             </div>
 
-            <label className="flex cursor-pointer items-center gap-3 rounded-2xl bg-surface p-4 ring-1 ring-line">
-              <input type="checkbox" checked={f.featured} onChange={(e) => set("featured", e.target.checked)} className="h-5 w-5 accent-[var(--sakura-deep)]" />
-              <span>
-                <span className="block text-sm font-bold">★ Nổi bật</span>
-                <span className="block text-xs text-muted">Hiển thị trong slide lớn ở trang chủ</span>
-              </span>
-            </label>
 
             {msg && (
               <p className={`rounded-2xl px-4 py-3 text-sm font-semibold ${msg.ok ? "bg-matcha/20 text-matcha-deep" : "bg-red-500/10 text-red-600 dark:text-red-300"}`}>

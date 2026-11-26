@@ -212,7 +212,6 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-bold">
-                      {r.featured && <span className="mr-1 text-yuzu">★</span>}
                       {r.title}
                     </span>
                     <span className="block truncate text-xs text-muted">
