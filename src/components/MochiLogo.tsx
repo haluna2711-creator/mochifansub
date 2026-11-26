@@ -65,7 +65,7 @@ export function MochiLogo() {
       </span>
       <span className="leading-none">
         <span className="block font-display text-[1.15rem] font-extrabold tracking-tight text-ink">
-          Mochi<span className="text-sakura-deep"> Fansub</span>
+          Tiệm bánh<span className="text-sakura-deep"> Mochi</span>
         </span>
       </span>
     </span>
