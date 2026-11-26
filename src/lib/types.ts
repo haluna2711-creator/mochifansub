@@ -1,5 +1,10 @@
 export type ReleaseStatus = "ongoing" | "completed" | "upcoming";
 
+export interface StaffMember {
+  role: string;
+  name: string;
+}
+
 export interface Release {
   id: string;
   slug: string;
@@ -14,6 +19,8 @@ export interface Release {
   status: ReleaseStatus;
   total_episodes: number | null;
   featured: boolean;
+  /** Nhân sự tham gia (chỉ có ở trang chi tiết / admin) */
+  staff?: StaffMember[] | null;
   created_at: string;
   updated_at: string;
 }
