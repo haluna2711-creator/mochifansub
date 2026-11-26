@@ -1,7 +1,20 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+function cleanUrl(raw?: string) {
+  if (!raw) return undefined;
+  let v = raw.trim().replace(/^["']|["']$/g, "").replace(/\/+$/, "");
+  if (v && !/^https?:\/\//i.test(v)) v = `https://${v}`;
+  try {
+    new URL(v);
+    return v;
+  } catch {
+    console.warn("NEXT_PUBLIC_SUPABASE_URL không hợp lệ:", raw);
+    return undefined;
+  }
+}
+
+const url = cleanUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
+const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim().replace(/^["']|["']$/g, "");
 
 export const isSupabaseConfigured = Boolean(url && anonKey);
 

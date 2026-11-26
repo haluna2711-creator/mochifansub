@@ -3,44 +3,42 @@
 import { useCallback, useEffect, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Release, Torrent } from "@/lib/types";
-import { IconMagnet, IconPlus, IconTrash } from "@/components/Icons";
+import { IconMagnet, IconTrash } from "@/components/Icons";
 import { Button, Field, Spinner, inputCls } from "./ui";
 import { uploadToStorage } from "./ReleaseEditor";
 
 const QUALITIES = ["1080p", "720p", "480p", "4K"];
 
-/** Đoán tập / chất lượng / tên từ magnet (tham số dn=). */
-export function parseMagnet(magnet: string) {
+/** Lấy tên file từ magnet (tham số dn=) để đoán chất lượng. */
+function parseMagnet(magnet: string) {
   let name = "";
   try {
     const dn = magnet.match(/[?&]dn=([^&]+)/)?.[1];
     if (dn) name = decodeURIComponent(dn.replace(/\+/g, " "));
   } catch {}
-  const quality = name.match(/(2160p|1080p|720p|480p|4K)/i)?.[1] ?? "";
-  const batch = name.match(/(\d{1,3})\s*[-~]\s*(\d{1,3})/);
-  const ep =
-    name.match(/(?:\s-\s|\bE|\bEP|Tập\s?)(\d{1,4}(?:\.\d)?)\b/i)?.[1] ??
-    name.match(/\[(\d{1,4})\]/)?.[1] ??
-    "";
-  const label = /batch/i.test(name) && batch
-    ? `Batch ${batch[1]}-${batch[2]}`
-    : ep
-      ? `Tập ${ep.padStart(2, "0")}`
-      : "";
-  return { name, quality: quality.replace(/2160p/i, "4K"), episode: ep, label };
+  const quality = (name.match(/(2160p|1080p|720p|480p|4K)/i)?.[1] ?? "").replace(/2160p/i, "4K");
+  return { name, quality };
 }
 
-const empty = { label: "", episode: "", quality: "1080p", size: "", sub_type: "Softsub", magnet: "", torrent_url: "" };
+type Form = { label: string; quality: string; size: string; sub_type: string; magnet: string; torrent_url: string };
 
+const toForm = (t: Torrent | null, release: Release): Form => ({
+  label: t?.label ?? (release.status === "completed" ? "Trọn bộ" : "Tập 01"),
+  quality: t?.quality ?? "1080p",
+  size: t?.size ?? "",
+  sub_type: t?.sub_type ?? "Softsub",
+  magnet: t?.magnet ?? "",
+  torrent_url: t?.torrent_url ?? "",
+});
+
+/** Mỗi phim chỉ có 1 link torrent: form này tạo mới hoặc thay thế link đó. */
 export function TorrentManager({ sb, release }: { sb: SupabaseClient; release: Release }) {
-  const [list, setList] = useState<Torrent[]>([]);
+  const [current, setCurrent] = useState<Torrent | null>(null);
+  const [f, setF] = useState<Form>(() => toForm(null, release));
   const [loading, setLoading] = useState(true);
-  const [f, setF] = useState(empty);
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [err, setErr] = useState("");
-  const [bulk, setBulk] = useState(false);
-  const [bulkText, setBulkText] = useState("");
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -48,11 +46,14 @@ export function TorrentManager({ sb, release }: { sb: SupabaseClient; release: R
       .from("torrents")
       .select("*")
       .eq("release_id", release.id)
-      .order("episode", { ascending: false, nullsFirst: false })
-      .order("created_at", { ascending: false });
-    setList((data ?? []) as Torrent[]);
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const t = (data as Torrent) ?? null;
+    setCurrent(t);
+    setF(toForm(t, release));
     setLoading(false);
-  }, [sb, release.id]);
+  }, [sb, release]);
 
   useEffect(() => {
     load();
@@ -60,63 +61,42 @@ export function TorrentManager({ sb, release }: { sb: SupabaseClient; release: R
 
   const onMagnet = (m: string) => {
     const p = parseMagnet(m);
-    setF((s) => ({
-      ...s,
-      magnet: m,
-      label: s.label || p.label,
-      episode: s.episode || (p.label.startsWith("Batch") ? "999" : p.episode),
-      quality: p.quality || s.quality,
-    }));
+    setF((s) => ({ ...s, magnet: m, quality: p.quality || s.quality }));
   };
 
-  const add = async (e: React.FormEvent) => {
+  const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!f.magnet && !f.torrent_url) return setErr("Cần ít nhất magnet hoặc file .torrent");
+    if (!f.magnet.trim() && !f.torrent_url.trim()) {
+      return setMsg({ ok: false, text: "Cần ít nhất magnet hoặc file .torrent" });
+    }
     setBusy(true);
-    setErr("");
-    const { error } = await sb.from("torrents").insert({
-      release_id: release.id,
-      label: f.label.trim() || "Tập mới",
-      episode: f.episode ? Number(f.episode) : null,
-      quality: f.quality || null,
-      size: f.size.trim() || null,
-      sub_type: f.sub_type || null,
-      magnet: f.magnet.trim() || null,
-      torrent_url: f.torrent_url.trim() || null,
-    });
-    setBusy(false);
-    if (error) return setErr(error.message);
-    setF({ ...empty, quality: f.quality, sub_type: f.sub_type });
-    load();
-  };
-
-  const addBulk = async () => {
-    const lines = bulkText.split(/\s+/).filter((l) => l.startsWith("magnet:"));
-    if (!lines.length) return setErr("Không tìm thấy magnet nào");
-    setBusy(true);
-    setErr("");
-    const rows = lines.map((m) => {
-      const p = parseMagnet(m);
-      return {
+    setMsg(null);
+    const { error } = await sb.from("torrents").upsert(
+      {
         release_id: release.id,
-        label: p.label || p.name.slice(0, 60) || "Tập mới",
-        episode: p.label.startsWith("Batch") ? 999 : p.episode ? Number(p.episode) : null,
-        quality: p.quality || null,
-        sub_type: "Softsub",
-        magnet: m,
-      };
-    });
-    const { error } = await sb.from("torrents").insert(rows);
+        label: f.label.trim() || "Trọn bộ",
+        episode: null,
+        quality: f.quality || null,
+        size: f.size.trim() || null,
+        sub_type: f.sub_type || null,
+        magnet: f.magnet.trim() || null,
+        torrent_url: f.torrent_url.trim() || null,
+        created_at: new Date().toISOString(),
+      },
+      { onConflict: "release_id" },
+    );
     setBusy(false);
-    if (error) return setErr(error.message);
-    setBulkText("");
-    setBulk(false);
+    if (error) return setMsg({ ok: false, text: error.message });
+    setMsg({ ok: true, text: current ? "Đã cập nhật link ✓" : "Đã thêm link ✓" });
     load();
   };
 
-  const remove = async (t: Torrent) => {
-    if (!confirm(`Xoá “${t.label} ${t.quality ?? ""}”?`)) return;
-    await sb.from("torrents").delete().eq("id", t.id);
+  const remove = async () => {
+    if (!current || !confirm("Xoá link torrent của phim này?")) return;
+    setBusy(true);
+    await sb.from("torrents").delete().eq("release_id", release.id);
+    setBusy(false);
+    setMsg({ ok: true, text: "Đã xoá link" });
     load();
   };
 
@@ -126,15 +106,9 @@ export function TorrentManager({ sb, release }: { sb: SupabaseClient; release: R
     try {
       const url = await uploadToStorage(sb, file, "torrents");
       const p = parseMagnet(`?dn=${encodeURIComponent(file.name)}`);
-      setF((s) => ({
-        ...s,
-        torrent_url: url,
-        label: s.label || p.label,
-        episode: s.episode || p.episode,
-        quality: p.quality || s.quality,
-      }));
+      setF((s) => ({ ...s, torrent_url: url, quality: p.quality || s.quality }));
     } catch (e) {
-      setErr((e as Error).message);
+      setMsg({ ok: false, text: (e as Error).message });
     }
     setUploading(false);
   };
@@ -146,54 +120,69 @@ export function TorrentManager({ sb, release }: { sb: SupabaseClient; release: R
           <IconMagnet />
         </span>
         <h3 className="font-display text-lg font-black">Link torrent</h3>
-        <span className="text-sm text-muted">({list.length})</span>
-        <button
-          type="button"
-          onClick={() => setBulk((v) => !v)}
-          className="press ml-auto rounded-full bg-surface px-3.5 py-1.5 text-xs font-extrabold ring-1 ring-line hover:bg-surface-2"
+        <span
+          className={`rounded-full px-2.5 py-0.5 text-xs font-extrabold ${
+            current ? "bg-matcha/20 text-matcha-deep" : "bg-surface-2 text-muted"
+          }`}
         >
-          {bulk ? "Thêm từng link" : "Dán nhiều magnet"}
-        </button>
+          {current ? "Đã có link" : "Chưa có link"}
+        </span>
       </div>
 
-      {bulk ? (
-        <div className="space-y-3 rounded-3xl bg-surface p-4 ring-1 ring-line">
-          <Field label="Mỗi dòng 1 magnet" hint="Tự nhận tên tập & chất lượng từ tên file (vd: “[Mochi] Tên phim - 05 [1080p].mkv”).">
-            <textarea className={`${inputCls} min-h-40 font-mono text-xs`} value={bulkText} onChange={(e) => setBulkText(e.target.value)} placeholder="magnet:?xt=urn:btih:...&#10;magnet:?xt=urn:btih:..." />
-          </Field>
-          {err && <p className="text-sm font-semibold text-red-600 dark:text-red-300">{err}</p>}
-          <Button type="button" variant="matcha" onClick={addBulk} disabled={busy}>
-            {busy ? <Spinner /> : <IconPlus />} Thêm tất cả
-          </Button>
-        </div>
+      {loading ? (
+        <div className="skeleton h-80 rounded-3xl" />
       ) : (
-        <form onSubmit={add} className="space-y-3 rounded-3xl bg-surface p-4 ring-1 ring-line">
-          <Field label="Magnet" hint="Dán vào sẽ tự điền tên tập & chất lượng.">
-            <input className={`${inputCls} font-mono text-xs`} value={f.magnet} onChange={(e) => onMagnet(e.target.value)} placeholder="magnet:?xt=urn:btih:…" />
+        <form onSubmit={save} className="space-y-3 rounded-3xl bg-surface p-4 ring-1 ring-line">
+          <Field label="Magnet" hint="Mỗi phim chỉ có 1 link. Lưu lại sẽ thay thế link cũ.">
+            <input
+              className={`${inputCls} font-mono text-xs`}
+              value={f.magnet}
+              onChange={(e) => onMagnet(e.target.value)}
+              placeholder="magnet:?xt=urn:btih:…"
+            />
           </Field>
           <Field label="hoặc file .torrent">
             <div className="flex gap-2">
-              <input className={inputCls} value={f.torrent_url} onChange={(e) => setF({ ...f, torrent_url: e.target.value })} placeholder="URL file .torrent" />
+              <input
+                className={inputCls}
+                value={f.torrent_url}
+                onChange={(e) => setF({ ...f, torrent_url: e.target.value })}
+                placeholder="URL file .torrent"
+              />
               <label className="press grid shrink-0 cursor-pointer place-items-center rounded-2xl bg-surface-2 px-4 text-xs font-extrabold ring-1 ring-line">
                 {uploading ? <Spinner /> : "Tải lên"}
-                <input type="file" accept=".torrent,application/x-bittorrent" className="hidden" onChange={(e) => uploadTorrent(e.target.files?.[0])} />
+                <input
+                  type="file"
+                  accept=".torrent,application/x-bittorrent"
+                  className="hidden"
+                  onChange={(e) => uploadTorrent(e.target.files?.[0])}
+                />
               </label>
             </div>
           </Field>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Field label="Nhãn" className="col-span-2">
-              <input className={inputCls} value={f.label} onChange={(e) => setF({ ...f, label: e.target.value })} placeholder="Tập 01" />
-            </Field>
-            <Field label="Số tập">
-              <input className={inputCls} type="number" step="0.5" value={f.episode} onChange={(e) => setF({ ...f, episode: e.target.value })} />
+              <input
+                className={inputCls}
+                value={f.label}
+                onChange={(e) => setF({ ...f, label: e.target.value })}
+                placeholder="Trọn bộ 01-12"
+              />
             </Field>
             <Field label="Chất lượng">
               <select className={inputCls} value={f.quality} onChange={(e) => setF({ ...f, quality: e.target.value })}>
-                {QUALITIES.map((q) => <option key={q}>{q}</option>)}
+                {QUALITIES.map((q) => (
+                  <option key={q}>{q}</option>
+                ))}
               </select>
             </Field>
             <Field label="Dung lượng">
-              <input className={inputCls} value={f.size} onChange={(e) => setF({ ...f, size: e.target.value })} placeholder="1.2 GB" />
+              <input
+                className={inputCls}
+                value={f.size}
+                onChange={(e) => setF({ ...f, size: e.target.value })}
+                placeholder="15.6 GB"
+              />
             </Field>
           </div>
           <Field label="Loại sub">
@@ -202,36 +191,29 @@ export function TorrentManager({ sb, release }: { sb: SupabaseClient; release: R
               <option>Hardsub</option>
             </select>
           </Field>
-          {err && <p className="text-sm font-semibold text-red-600 dark:text-red-300">{err}</p>}
-          <Button type="submit" variant="matcha" disabled={busy || uploading}>
-            {busy ? <Spinner /> : <IconPlus />} Thêm link
-          </Button>
+
+          {msg && (
+            <p
+              className={`rounded-2xl px-4 py-3 text-sm font-semibold ${
+                msg.ok ? "bg-matcha/20 text-matcha-deep" : "bg-red-500/10 text-red-600 dark:text-red-300"
+              }`}
+            >
+              {msg.text}
+            </p>
+          )}
+
+          <div className="flex flex-wrap gap-2">
+            <Button type="submit" variant="matcha" disabled={busy || uploading}>
+              {busy && <Spinner />} {current ? "Cập nhật link" : "Lưu link"}
+            </Button>
+            {current && (
+              <Button type="button" variant="danger" className="ml-auto" onClick={remove} disabled={busy}>
+                <IconTrash /> Xoá link
+              </Button>
+            )}
+          </div>
         </form>
       )}
-
-      <ul className="mt-5 space-y-2">
-        {loading ? (
-          <li className="skeleton h-16 rounded-2xl" />
-        ) : list.length === 0 ? (
-          <li className="rounded-2xl bg-surface p-4 text-center text-sm text-muted ring-1 ring-line">Chưa có link nào.</li>
-        ) : (
-          list.map((t) => (
-            <li key={t.id} className="flex items-center gap-3 rounded-2xl bg-surface p-3 ring-1 ring-line">
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-bold">
-                  {t.label} <span className="font-black text-sakura-deep">{t.quality}</span>
-                </p>
-                <p className="truncate text-xs text-muted">
-                  {[t.size, t.sub_type, t.magnet ? "magnet" : null, t.torrent_url ? ".torrent" : null].filter(Boolean).join(" · ")}
-                </p>
-              </div>
-              <button type="button" onClick={() => remove(t)} aria-label="Xoá" className="press grid h-9 w-9 place-items-center rounded-full text-red-500 hover:bg-red-500/10">
-                <IconTrash />
-              </button>
-            </li>
-          ))
-        )}
-      </ul>
     </div>
   );
 }

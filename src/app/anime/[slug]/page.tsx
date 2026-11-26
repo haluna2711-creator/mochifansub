@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getAllSlugs, getRelease, getReleases } from "@/lib/data";
 import { STATUS_LABEL } from "@/lib/utils";
 import { Cover } from "@/components/Cover";
-import { TorrentList } from "@/components/TorrentList";
+import { DownloadCard } from "@/components/DownloadCard";
 import { AnimeCard } from "@/components/AnimeCard";
 import { Section } from "@/components/Section";
 import { IconChevron } from "@/components/Icons";
@@ -109,15 +109,12 @@ export default async function AnimePage({ params }: { params: Params }) {
               </p>
             )}
 
-            <div className="mt-10 text-left">
+            <div className="mt-8 text-left">
               <div className="mb-4 flex items-center gap-3">
                 <span className="h-8 w-2.5 rounded-full bg-gradient-to-b from-matcha to-matcha-deep" aria-hidden />
                 <h2 className="font-display text-xl font-black md:text-2xl">Link tải</h2>
-                <span className="rounded-full bg-matcha/20 px-2.5 py-0.5 text-xs font-extrabold text-matcha-deep">
-                  {r.torrents.length}
-                </span>
               </div>
-              <TorrentList torrents={r.torrents} />
+              <DownloadCard torrent={r.torrents[0] ?? null} />
               <p className="mt-3 text-xs text-muted">
                 Mẹo: dùng qBittorrent hoặc uTorrent. Nhấn <b>Magnet</b> để mở trực tiếp, hoặc sao chép link.
               </p>

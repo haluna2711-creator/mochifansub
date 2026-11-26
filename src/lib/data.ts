@@ -66,7 +66,7 @@ export async function getRelease(slug: string): Promise<ReleaseWithTorrents | nu
     .from("releases")
     .select(`${RELEASE_COLS}, torrents(*)`)
     .eq("slug", slug)
-    .order("episode", { referencedTable: "torrents", ascending: false })
+    .order("created_at", { referencedTable: "torrents", ascending: false })
     .maybeSingle();
   if (error) console.error("getRelease", error.message);
   return (data as ReleaseWithTorrents) ?? null;

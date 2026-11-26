@@ -127,41 +127,23 @@ const seeds: Seed[] = [
 
 export const demoReleases: Release[] = seeds.map((r, i) => base(r, i));
 
-const qualities = ["1080p", "720p"];
-export const demoTorrents: Torrent[] = demoReleases.flatMap((r, ri) => {
-  if (r.status === "upcoming") return [];
-  const eps = r.status === "completed" ? 12 : 6 - (ri % 3);
-  const list: Torrent[] = [];
-  for (let e = eps; e >= 1; e--) {
-    qualities.forEach((q, qi) => {
-      const label = `Tập ${String(e).padStart(2, "0")}`;
-      list.push({
-        id: `${r.id}-${e}-${q}`,
-        release_id: r.id,
-        label,
-        episode: e,
-        quality: q,
-        size: q === "1080p" ? `${(1.1 + ((e * 7) % 5) / 10).toFixed(1)} GB` : `${520 + ((e * 37) % 180)} MB`,
-        sub_type: "Softsub",
-        magnet: `magnet:?xt=urn:btih:${hash(r.slug + e + q)}&dn=${encodeURIComponent(`[Mochi] ${r.title} - ${label} [${q}]`)}`,
-        torrent_url: null,
-        created_at: ago(ri * 7 + (eps - e) * 168 + qi * 0.2 + 1),
-      });
-    });
-  }
-  if (r.status === "completed") {
-    list.unshift({
-      id: `${r.id}-batch`,
+/** Mỗi bộ phim chỉ có đúng 1 link torrent. */
+export const demoTorrents: Torrent[] = demoReleases
+  .filter((r) => r.status !== "upcoming")
+  .map((r, ri) => {
+    const done = r.status === "completed";
+    const eps = done ? r.total_episodes ?? 12 : 6 - (ri % 3);
+    const label = done ? `Trọn bộ 01-${String(eps).padStart(2, "0")}` : `Tập 01-${String(eps).padStart(2, "0")}`;
+    return {
+      id: `${r.id}-torrent`,
       release_id: r.id,
-      label: "Batch 01-12",
-      episode: 999,
+      label,
+      episode: null,
       quality: "1080p",
-      size: "15.8 GB",
+      size: `${(eps * 1.3).toFixed(1)} GB`,
       sub_type: "Softsub",
-      magnet: `magnet:?xt=urn:btih:${hash(r.slug + "batch")}&dn=${encodeURIComponent(`[Mochi] ${r.title} - Batch [1080p]`)}`,
+      magnet: `magnet:?xt=urn:btih:${hash(r.slug)}&dn=${encodeURIComponent(`[Mochi] ${r.title} - ${label} [1080p]`)}`,
       torrent_url: null,
-      created_at: ago(ri * 7 + 0.5),
-    });
-  }
-  return list;
-});
+      created_at: r.updated_at,
+    };
+  });
