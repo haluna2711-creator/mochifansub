@@ -7,6 +7,8 @@ import { themeScript } from "@/components/ThemeToggle";
 import { SearchPalette } from "@/components/SearchPalette";
 import { SiteBackground } from "@/components/SiteBackground";
 import { getBackground } from "@/lib/siteSettings";
+import { AuthGuard } from "@/components/AuthGuard";
+import { ChromeOnly } from "@/components/ChromeOnly";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://mochi-fansub.vercel.app";
 
@@ -47,12 +49,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-surface focus:px-4 focus:py-2">
           Bỏ qua tới nội dung
         </a>
-        <SiteBackground />
-        <Header />
+        <AuthGuard />
+        <ChromeOnly>
+          <SiteBackground />
+          <Header />
+        </ChromeOnly>
         <main id="main">{children}</main>
-        <Footer />
-        <MobileNav />
-        <SearchPalette />
+        <ChromeOnly>
+          <Footer />
+          <MobileNav />
+          <SearchPalette />
+        </ChromeOnly>
       </body>
     </html>
   );
