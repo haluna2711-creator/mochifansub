@@ -10,6 +10,7 @@ import { MochiGate } from "@/components/MochiGate";
 import { AnimeCard } from "@/components/AnimeCard";
 import { Section } from "@/components/Section";
 import { IconChevron } from "@/components/Icons";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 export const revalidate = 60;
 
@@ -81,6 +82,7 @@ export default async function AnimePage({ params }: { params: Params }) {
             <div className="shadow-mochi relative aspect-[2/3] overflow-hidden rounded-[2rem] ring-4 ring-surface">
               <Cover src={r.cover_url} title={r.title} titleJp={r.title_jp} sizes="(max-width: 768px) 176px, 272px" priority />
             </div>
+            <FavoriteButton releaseId={r.id} />
           </div>
 
           {/* Thông tin */}
