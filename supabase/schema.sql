@@ -23,6 +23,7 @@ create table if not exists public.releases (
                  check (status in ('ongoing', 'completed', 'upcoming')),
   total_episodes int,
   featured       boolean not null default false,
+  staff          jsonb not null default '[]'::jsonb,  -- [{"role":"Dịch","name":"..."}]
   created_at     timestamptz not null default now(),
   updated_at     timestamptz not null default now()
 );
