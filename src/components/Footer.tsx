@@ -8,7 +8,7 @@ export function Footer() {
         <div className="flex items-center gap-4">
           <MochiFace className="animate-wobble h-14 w-14" />
           <div>
-            <p className="font-display text-lg font-extrabold">Mochi Fansub</p>
+            <p className="font-display text-lg font-extrabold">Tiệm bánh Mochi</p>
             <p className="text-sm text-muted">Dẻo thơm một hạt, đắng cay muôn phần.</p>
           </div>
         </div>
@@ -19,7 +19,7 @@ export function Footer() {
         </div>
       </div>
       <p className="mx-auto max-w-7xl px-4 text-xs text-muted sm:px-6">
-        © {new Date().getFullYear()} Mochi Fansub · Sản phẩm phi lợi nhuận của nhóm dịch. Hãy ủng hộ bản quyền chính thức khi có thể. Xin cảm ơn.
+        © {new Date().getFullYear()} Tiệm bánh Mochi · Sản phẩm phi lợi nhuận của tiệm bánh. Hãy ủng hộ hàng chính hãng khi có thể. Xin cảm ơn.
       </p>
     </footer>
   );
