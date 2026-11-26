@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { COMMENT_MAX, NAME_MAX, type PublicComment } from "@/lib/comments";
 import { hueFrom, timeAgo } from "@/lib/utils";
+import { getBrowserSupabase } from "@/lib/supabase";
 
 const NAME_KEY = "mochi-comment-name";
 const PAGE = 20;
@@ -54,6 +55,15 @@ export function CommentSection({ releaseId }: { releaseId: string }) {
     try {
       setName(localStorage.getItem(NAME_KEY) ?? "");
     } catch {}
+    // Đã đăng nhập → dùng tên tài khoản làm tên bình luận
+    const sb = getBrowserSupabase();
+    sb?.auth.getSession().then(async ({ data }) => {
+      const u = data.session?.user;
+      if (!u) return;
+      const { data: p } = await sb.from("profiles").select("username").eq("id", u.id).maybeSingle();
+      const n = p?.username || (u.user_metadata?.username as string | undefined);
+      if (n) setName(n);
+    });
   }, []);
 
   useEffect(() => {
