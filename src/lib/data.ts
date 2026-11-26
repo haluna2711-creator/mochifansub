@@ -14,17 +14,18 @@ const RELEASE_COLS =
   "id,slug,title,title_jp,synopsis,cover_url,banner_url,genres,year,season,status,total_episodes,featured,created_at,updated_at";
 
 export async function getReleases(query: ReleaseQuery = {}): Promise<Release[]> {
-  const sb = getServerSupabase();
-  const { q, genre, status, limit = 60 } = query;
-
-  if (!sb) {
-    const nq = q ? normalize(q) : "";
-    return demoReleases
-      .filter((r) => (!genre || r.genres.includes(genre)) && (!status || r.status === status))
-      .filter((r) => !nq || normalize(`${r.title} ${r.title_jp ?? ""}`).includes(nq))
-      .sort((a, b) => b.updated_at.localeCompare(a.updated_at))
-      .slice(0, limit);
-  }
+  const { data, error } = await sb
+    .from("releases")
+    .select(`${RELEASE_COLS}, torrents(*)`)
+    .eq("slug", slug)
+    .maybeSingle();
+  if (error) console.error("getRelease", error.message);
+  if (!data) return null;
+  // Mỗi phim 1 link → Supabase trả về object hoặc null thay vì mảng; chuẩn hoá về mảng
+  const raw = (data as { torrents?: Torrent[] | Torrent | null }).torrents;
+  const torrents = Array.isArray(raw) ? raw : raw ? [raw] : [];
+  return { ...(data as unknown as Release), torrents };
+}
 
   let req = sb.from("releases").select(RELEASE_COLS).order("updated_at", { ascending: false }).limit(limit);
   if (genre) req = req.contains("genres", [genre]);
