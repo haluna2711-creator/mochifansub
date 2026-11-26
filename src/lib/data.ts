@@ -42,18 +42,35 @@ export async function getReleases(query: ReleaseQuery = {}): Promise<Release[]> 
   return (data ?? []) as Release[];
 }
 
+const FEATURED_MAX = 3;
+
+/** Slide lớn trang chủ: tự lấy tối đa 3 phim có nhiều lượt tải nhất; thiếu thì bù bằng phim mới nhất. */
 export async function getFeatured(): Promise<Release[]> {
   const sb = getServerSupabase();
-  if (!sb) return demoReleases.filter((r) => r.featured);
-  const { data } = await sb
-    .from("releases")
-    .select(RELEASE_COLS)
-    .eq("featured", true)
-    .order("updated_at", { ascending: false })
-    .limit(6);
-  if (data && data.length) return data as Release[];
-  // Chưa đánh dấu nổi bật bộ nào → lấy 3 bộ mới nhất
-  return getReleases({ limit: 3 });
+  if (!sb) return demoReleases.filter((r) => r.featured).slice(0, FEATURED_MAX);
+
+  const picked: Release[] = [];
+  const { data, error } = await sb
+    .from("download_stats")
+    .select(`downloads, release:releases(${RELEASE_COLS})`)
+    .gt("downloads", 0)
+    .order("downloads", { ascending: false })
+    .limit(FEATURED_MAX);
+  // Lỗi (chưa chạy supabase/add-download-stats.sql) → bỏ qua, dùng phim mới nhất bên dưới
+  if (!error) {
+    for (const row of (data ?? []) as unknown as { release: Release | Release[] | null }[]) {
+      const rel = Array.isArray(row.release) ? row.release[0] : row.release;
+      if (rel) picked.push(rel);
+    }
+  }
+  if (picked.length < FEATURED_MAX) {
+    const latest = await getReleases({ limit: FEATURED_MAX + picked.length });
+    for (const r of latest) {
+      if (picked.length >= FEATURED_MAX) break;
+      if (!picked.some((p) => p.id === r.id)) picked.push(r);
+    }
+  }
+  return picked;
 }
 
 export async function getRelease(slug: string): Promise<ReleaseWithTorrents | null> {
