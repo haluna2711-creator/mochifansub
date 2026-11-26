@@ -8,8 +8,8 @@ import { ThemeToggle } from "./ThemeToggle";
 import { SearchTrigger } from "./SearchPalette";
 
 const links = [
-  { href: "/", label: "Trang chủ" },
-  { href: "/browse", label: "Khám phá" },
+  { href: "/", label: "Cửa tiệm" },
+  { href: "/browse", label: "Tủ bánh" },
 ];
 
 export function Header() {

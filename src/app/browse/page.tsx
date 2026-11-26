@@ -9,12 +9,12 @@ import { SearchBar } from "@/components/SearchBar";
 import { StatusTabs } from "@/components/StatusTabs";
 import { MochiFace } from "@/components/MochiLogo";
 
-export const metadata: Metadata = { title: "Khám phá" };
+export const metadata: Metadata = { title: "Tủ bánh" };
 
 const tabs: { key?: ReleaseStatus; label: string }[] = [
   { label: "Tất cả" },
-  { key: "ongoing", label: "Đang tiến hành" },
-  { key: "completed", label: "Hoàn thành" },
+  { key: "ongoing", label: "Đang hấp" },
+  { key: "completed", label: "Bánh đủ vị" },
   { key: "upcoming", label: "Sắp ra mắt" },
 ];
 

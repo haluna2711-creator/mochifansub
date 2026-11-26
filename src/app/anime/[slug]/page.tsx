@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!r) return { title: "Không tìm thấy" };
   const desc = r.synopsis?.slice(0, 160) ?? `Tải ${r.title} Bánh chín — Tiệm bánh Mochi`;
   return {
-    title: `${r.title} Vietsub`,
+    title: r.title,
     description: desc,
     openGraph: { title: r.title, description: desc, images: r.cover_url ? [r.cover_url] : undefined },
   };
@@ -68,9 +68,9 @@ export default async function AnimePage({ params }: { params: Params }) {
 
       <div className="relative mx-auto -mt-36 max-w-7xl px-4 sm:px-6 md:-mt-44">
         <nav aria-label="breadcrumb" className="mb-4 flex items-center gap-1 text-xs font-bold text-muted">
-          <Link href="/" className="hover:text-sakura-deep">Trang chủ</Link>
+          <Link href="/" className="hover:text-sakura-deep">Cửa tiệm</Link>
           <IconChevron className="h-3.5 w-3.5" />
-          <Link href="/browse" className="hover:text-sakura-deep">Khám phá</Link>
+          <Link href="/browse" className="hover:text-sakura-deep">Tủ bánh</Link>
           <IconChevron className="h-3.5 w-3.5" />
           <span className="truncate text-ink">{r.title}</span>
         </nav>

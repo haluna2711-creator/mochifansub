@@ -32,8 +32,8 @@ export function timeAgo(iso: string) {
 }
 
 export const STATUS_LABEL: Record<ReleaseStatus, string> = {
-  ongoing: "Đang tiến hành",
-  completed: "Hoàn thành",
+  ongoing: "Đang hấp",
+  completed: "Bánh đủ vị",
   upcoming: "Sắp ra mắt",
 };
 

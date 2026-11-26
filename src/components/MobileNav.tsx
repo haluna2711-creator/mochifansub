@@ -7,8 +7,8 @@ import { IconGrid, IconHome, IconMagnet, IconSearch } from "./Icons";
 import { openSearch } from "./SearchPalette";
 
 const items = [
-  { href: "/", label: "Trang chủ", icon: IconHome, match: (p: string) => p === "/" },
-  { href: "/browse", label: "Khám phá", icon: IconGrid, match: (p: string) => p === "/browse" },
+  { href: "/", label: "Cửa tiệm", icon: IconHome, match: (p: string) => p === "/" },
+  { href: "/browse", label: "Tủ bánh", icon: IconGrid, match: (p: string) => p === "/browse" },
   { href: "/#latest", label: "Torrent mới", icon: IconMagnet, match: () => false },
 ];
 

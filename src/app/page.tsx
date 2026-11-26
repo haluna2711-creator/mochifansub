@@ -50,7 +50,7 @@ export default async function HomePage() {
       </div>
 
       {ongoing.length > 0 && (
-        <Section title="Đang tiến hành" jp="放送中" href="/browse?status=ongoing">
+        <Section title="Đang hấp" jp="放送中" href="/browse?status=ongoing">
           <div className="snap-row -mx-4 auto-cols-[42%] gap-4 px-4 pb-4 sm:auto-cols-[28%] md:auto-cols-[20%] lg:auto-cols-[calc((100%-5*1rem)/6)] sm:mx-0 sm:px-0 [scroll-padding-inline:1rem] sm:[scroll-padding-inline:0]">
             {ongoing.map((r) => (
               <AnimeCard key={r.id} r={r} />
