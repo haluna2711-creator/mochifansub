@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Release, ReleaseStatus } from "@/lib/types";
+import type { Release, ReleaseStatus, StaffMember } from "@/lib/types";
+import { STAFF_ROLES } from "@/lib/staff";
 import { slugify } from "@/lib/utils";
 import { Cover } from "@/components/Cover";
 import { IconTrash, IconX } from "@/components/Icons";
@@ -24,6 +25,7 @@ type Form = {
   status: ReleaseStatus;
   total_episodes: string;
   featured: boolean;
+  staff: StaffMember[];
 };
 
 const toForm = (r: Release | null): Form => ({
@@ -39,6 +41,7 @@ const toForm = (r: Release | null): Form => ({
   status: r?.status ?? "ongoing",
   total_episodes: r?.total_episodes?.toString() ?? "",
   featured: r?.featured ?? false,
+  staff: (r?.staff ?? []).map((m) => ({ role: m.role, name: m.name })),
 });
 
 export async function uploadToStorage(sb: SupabaseClient, file: File, folder: string) {
@@ -85,6 +88,11 @@ export function ReleaseEditor({
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) => setF((s) => ({ ...s, [k]: v }));
 
+  const setStaff = (i: number, patch: Partial<StaffMember>) =>
+    setF((s) => ({ ...s, staff: s.staff.map((m, j) => (j === i ? { ...m, ...patch } : m)) }));
+  const addStaff = (role = "") => setF((s) => ({ ...s, staff: [...s.staff, { role, name: "" }] }));
+  const removeStaff = (i: number) => setF((s) => ({ ...s, staff: s.staff.filter((_, j) => j !== i) }));
+
   const upload = async (kind: "cover" | "banner", file?: File) => {
     if (!file) return;
     setUploading(kind);
@@ -114,6 +122,9 @@ export function ReleaseEditor({
       status: f.status,
       total_episodes: f.total_episodes ? Number(f.total_episodes) : null,
       featured: f.featured,
+      staff: f.staff
+        .map((m) => ({ role: m.role.trim() || "Khác", name: m.name.trim() }))
+        .filter((m) => m.name),
     };
     const req = release
       ? sb.from("releases").update(payload).eq("id", release.id).select().single()
@@ -239,6 +250,68 @@ export function ReleaseEditor({
               <Field label="Số tập">
                 <input className={inputCls} type="number" inputMode="numeric" value={f.total_episodes} onChange={(e) => set("total_episodes", e.target.value)} />
               </Field>
+            </div>
+
+            <div>
+              <span className="mb-1.5 block text-xs font-extrabold uppercase tracking-wide text-muted">Nhân sự tham gia</span>
+              {f.staff.length > 0 && (
+                <div className="mb-2 space-y-2">
+                  {f.staff.map((m, i) => (
+                    <div key={i} className="grid grid-cols-[7.5rem_1fr_auto] items-center gap-2 sm:grid-cols-[9rem_1fr_auto]">
+                      <input
+                        className={inputCls}
+                        list="staff-roles"
+                        value={m.role}
+                        onChange={(e) => setStaff(i, { role: e.target.value })}
+                        placeholder="Vai trò"
+                        aria-label="Vai trò"
+                      />
+                      <input
+                        className={inputCls}
+                        value={m.name}
+                        onChange={(e) => setStaff(i, { name: e.target.value })}
+                        placeholder="Tên thành viên"
+                        aria-label="Tên thành viên"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeStaff(i)}
+                        aria-label="Xoá dòng này"
+                        className="press grid h-10 w-10 place-items-center rounded-full bg-surface text-muted ring-1 ring-line hover:text-ink"
+                      >
+                        <IconX className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <datalist id="staff-roles">
+                {STAFF_ROLES.map((r) => (
+                  <option key={r} value={r} />
+                ))}
+              </datalist>
+              <div className="flex flex-wrap gap-2">
+                {STAFF_ROLES.map((role) => (
+                  <button
+                    key={role}
+                    type="button"
+                    onClick={() => addStaff(role)}
+                    className="press rounded-full bg-surface px-3 py-1.5 text-xs font-bold ring-1 ring-line hover:bg-sakura/20 hover:text-sakura-deep"
+                  >
+                    + {role}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => addStaff()}
+                  className="press rounded-full bg-surface px-3 py-1.5 text-xs font-bold text-muted ring-1 ring-line hover:text-ink"
+                >
+                  + Vai trò khác
+                </button>
+              </div>
+              <span className="mt-1.5 block text-xs text-muted">
+                Một vai trò có nhiều người thì thêm nhiều dòng, trang phim sẽ tự gộp lại.
+              </span>
             </div>
 
             <label className="flex cursor-pointer items-center gap-3 rounded-2xl bg-surface p-4 ring-1 ring-line">
