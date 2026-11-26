@@ -5,6 +5,7 @@ import { MobileNav } from "@/components/MobileNav";
 import { Footer } from "@/components/Footer";
 import { themeScript } from "@/components/ThemeToggle";
 import { SearchPalette } from "@/components/SearchPalette";
+import { SiteBackground } from "@/components/SiteBackground";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://mochi-fansub.vercel.app";
 
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-surface focus:px-4 focus:py-2">
           Bỏ qua tới nội dung
         </a>
+        <SiteBackground />
         <Header />
         <main id="main">{children}</main>
         <Footer />
