@@ -5,6 +5,7 @@ import { getAllSlugs, getRelease, getReleases } from "@/lib/data";
 import { STATUS_LABEL } from "@/lib/utils";
 import { Cover } from "@/components/Cover";
 import { DownloadCard } from "@/components/DownloadCard";
+import { StaffList } from "@/components/StaffList";
 import { AnimeCard } from "@/components/AnimeCard";
 import { Section } from "@/components/Section";
 import { IconChevron } from "@/components/Icons";
@@ -107,6 +108,12 @@ export default async function AnimePage({ params }: { params: Params }) {
               <p className="mx-auto mt-5 max-w-3xl whitespace-pre-line text-left leading-relaxed text-ink/85 md:mx-0">
                 {r.synopsis}
               </p>
+            )}
+
+            {r.staff && r.staff.length > 0 && (
+              <div className="mt-8 text-left">
+                <StaffList staff={r.staff} />
+              </div>
             )}
 
             <div className="mt-8 text-left">
