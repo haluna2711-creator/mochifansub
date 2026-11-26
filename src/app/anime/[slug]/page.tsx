@@ -46,7 +46,7 @@ export default async function AnimePage({ params }: { params: Params }) {
 
   const meta = [
     r.year && `${r.season ? `${r.season} ` : ""}${r.year}`,
-    r.total_episodes && `${r.total_episodes} tập`,
+    r.total_episodes && `${r.total_episodes} bánh`,
     STATUS_LABEL[r.status],
   ].filter(Boolean) as string[];
 
