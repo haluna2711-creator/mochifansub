@@ -43,8 +43,8 @@ export function SearchBar() {
         enterKeyHint="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Tìm theo tên phim, tên tiếng Nhật…"
-        aria-label="Tìm phim"
+        placeholder="Tìm bánh, tên tiếng Nhật…"
+        aria-label="Tìm bánh"
         className="h-full w-full bg-transparent text-base text-ink outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
       />
       {value && (
