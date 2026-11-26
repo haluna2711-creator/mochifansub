@@ -34,7 +34,7 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 md:h-[4.5rem]">
-        <Link href="/" className="group shrink-0" aria-label="Mochi Fansub - Trang chủ">
+        <Link href="/" className="group shrink-0" aria-label="Tiệm bánh Mochi - Trang chủ">
           <MochiLogo />
         </Link>
 
