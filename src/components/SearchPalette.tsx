@@ -141,7 +141,7 @@ export function SearchPalette() {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[70]" role="dialog" aria-modal="true" aria-label="Tìm phim">
+    <div className="fixed inset-0 z-[70]" role="dialog" aria-modal="true" aria-label="Tìm bánh">
       <button
         type="button"
         aria-label="Đóng"
@@ -171,8 +171,8 @@ export function SearchPalette() {
               enterKeyHint="search"
               autoComplete="off"
               spellCheck={false}
-              placeholder="Tìm phim, tên tiếng Nhật…"
-              aria-label="Tìm phim"
+              placeholder="Tìm bánh, tên tiếng Nhật…"
+              aria-label="Tìm bánh"
               className="search-input h-full w-full bg-transparent text-base font-semibold text-ink placeholder:font-normal placeholder:text-muted md:text-lg"
             />
             {q && (
@@ -222,7 +222,7 @@ export function SearchPalette() {
           )}
 
           <p className="mb-2 px-2 text-xs font-extrabold uppercase tracking-wide text-muted">
-            {q ? `Kết quả cho “${q}”` : "Mới cập nhật"}
+            {q ? `Kết quả cho “${q}”` : "Bánh mới hấp"}
           </p>
 
           {items.length === 0 && !loading ? (
@@ -275,7 +275,7 @@ export function SearchPalette() {
             onClick={() => go(q.trim() ? `/browse?q=${encodeURIComponent(q.trim())}` : "/browse")}
             className="press flex-1 rounded-full bg-sakura-deep py-2.5 text-sm font-extrabold text-white md:flex-none md:px-5"
           >
-            {q.trim() ? "Xem tất cả kết quả" : "Khám phá kho phim"}
+            {q.trim() ? "Xem tất cả kết quả" : "Tham quan tiệm bánh"}
           </button>
           <span className="ml-auto hidden items-center gap-3 text-xs text-muted md:flex">
             <span><kbd className="rounded bg-surface-2 px-1.5 py-0.5 font-bold ring-1 ring-line">↑↓</kbd> chọn</span>
@@ -297,7 +297,7 @@ export function SearchTrigger() {
         className="press group ml-auto hidden h-11 w-72 items-center gap-3 rounded-full bg-surface pl-4 pr-2 text-left ring-1 ring-line hover:ring-sakura md:flex lg:w-80"
       >
         <IconSearch className="h-4 w-4 text-muted transition-colors group-hover:text-sakura-deep" />
-        <span className="flex-1 text-sm text-muted">Tìm phim…</span>
+        <span className="flex-1 text-sm text-muted">Tìm bánh…</span>
       </button>
       <button
         type="button"
