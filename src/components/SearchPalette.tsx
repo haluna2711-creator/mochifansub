@@ -128,9 +128,9 @@ export function SearchPalette() {
       setActive((i) => Math.max(i - 1, 0));
     } else if (e.key === "Enter") {
       e.preventDefault();
-      if (q.trim() && items[active]) go(`/anime/${items[active].slug}`);
+      if (q.trim() && items[active]) go(`/${items[active].slug}`);
       else if (q.trim()) go(`/browse?q=${encodeURIComponent(q.trim())}`);
-      else if (items[active]) go(`/anime/${items[active].slug}`);
+      else if (items[active]) go(`/${items[active].slug}`);
     }
   };
 
@@ -236,7 +236,7 @@ export function SearchPalette() {
               {items.map((it, i) => (
                 <li key={it.id}>
                   <Link
-                    href={`/anime/${it.slug}`}
+                    href={`/${it.slug}`}
                     data-i={i}
                     onClick={() => remember(q)}
                     onMouseEnter={() => setActive(i)}

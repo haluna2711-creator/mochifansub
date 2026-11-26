@@ -99,7 +99,7 @@ export function HeroCarousel({ items }: { items: Release[] }) {
                   </p>
                 )}
                 <Link
-                  href={`/anime/${r.slug}`}
+                  href={`/${r.slug}`}
                   className="press mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-extrabold text-[#3b2a2e] shadow-lg hover:bg-sakura hover:text-white"
                 >
                   Mua ngay <IconArrow />
@@ -107,7 +107,7 @@ export function HeroCarousel({ items }: { items: Release[] }) {
               </div>
 
               <Link
-                href={`/anime/${r.slug}`}
+                href={`/${r.slug}`}
                 tabIndex={-1}
                 className="squish relative ml-auto hidden aspect-[2/3] w-52 shrink-0 overflow-hidden rounded-[1.75rem] shadow-2xl ring-4 ring-white/40 md:block lg:w-60"
               >

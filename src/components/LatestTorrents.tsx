@@ -25,7 +25,7 @@ export function LatestTorrents({ items }: { items: TorrentWithRelease[] }) {
       {items.map((t) => (
         <li key={t.id} className="flex items-center gap-3 p-3 transition-colors hover:bg-surface-2 sm:gap-4 sm:p-4">
           <Link
-            href={t.release ? `/anime/${t.release.slug}` : "#"}
+            href={t.release ? `/${t.release.slug}` : "#"}
             prefetch={false}
             className="relative aspect-[2/3] w-11 shrink-0 overflow-hidden rounded-xl ring-1 ring-line sm:w-12"
           >
@@ -33,7 +33,7 @@ export function LatestTorrents({ items }: { items: TorrentWithRelease[] }) {
           </Link>
           <div className="min-w-0 flex-1">
             <Link
-              href={t.release ? `/anime/${t.release.slug}` : "#"}
+              href={t.release ? `/${t.release.slug}` : "#"}
               prefetch={false}
               className="block truncate font-display text-sm font-bold hover:text-sakura-deep sm:text-[0.95rem]"
             >

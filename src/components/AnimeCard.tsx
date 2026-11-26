@@ -12,7 +12,7 @@ const statusStyle = {
 export function AnimeCard({ r, priority = false }: { r: Release; priority?: boolean }) {
   return (
     <Link
-      href={`/anime/${r.slug}`}
+      href={`/${r.slug}`}
       prefetch={false}
       className="squish group block rounded-[var(--radius-mochi)] outline-none"
     >
