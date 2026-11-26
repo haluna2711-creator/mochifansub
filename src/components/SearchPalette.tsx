@@ -289,8 +289,6 @@ export function SearchPalette() {
 
 /** Nút mở bảng tìm kiếm trên header */
 export function SearchTrigger() {
-  const [mac, setMac] = useState(false);
-  useEffect(() => setMac(/Mac|iPhone|iPad/.test(navigator.platform)), []);
   return (
     <>
       <button
@@ -300,9 +298,6 @@ export function SearchTrigger() {
       >
         <IconSearch className="h-4 w-4 text-muted transition-colors group-hover:text-sakura-deep" />
         <span className="flex-1 text-sm text-muted">Tìm phim…</span>
-        <kbd className="rounded-full bg-surface-2 px-2.5 py-1 text-[0.7rem] font-bold text-muted ring-1 ring-line">
-          {mac ? "⌘ K" : "Ctrl K"}
-        </kbd>
       </button>
       <button
         type="button"
