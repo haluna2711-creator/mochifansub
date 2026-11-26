@@ -13,6 +13,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button, Field, Spinner, inputCls } from "./ui";
 import { ReleaseEditor } from "./ReleaseEditor";
 import { BackgroundSettings } from "./BackgroundSettings";
+import { CommentsManager, countPending } from "./CommentsManager";
 
 type AdminState = "loading" | "anon" | "not-admin" | "admin";
 
@@ -138,6 +139,16 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
   const [q, setQ] = useState("");
   const [editing, setEditing] = useState<Release | "new" | null>(null);
   const [bgOpen, setBgOpen] = useState(false);
+  const [cmtOpen, setCmtOpen] = useState(false);
+  const [pending, setPending] = useState(0);
+
+  const refreshPending = useCallback(() => {
+    countPending(sb).then(setPending);
+  }, [sb]);
+
+  useEffect(() => {
+    refreshPending();
+  }, [refreshPending]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -166,6 +177,14 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
           <div className="ml-auto flex items-center gap-2">
             <span className="hidden text-sm text-muted sm:inline">{email}</span>
             <ThemeToggle />
+            <Button variant="ghost" className="relative h-10 px-4" onClick={() => setCmtOpen(true)}>
+              Bình luận
+              {pending > 0 && (
+                <span className="grid h-5 min-w-5 place-items-center rounded-full bg-sakura-deep px-1.5 text-[0.7rem] font-extrabold text-white">
+                  {pending > 99 ? "99+" : pending}
+                </span>
+              )}
+            </Button>
             <Button variant="ghost" className="h-10 px-4" onClick={() => setBgOpen(true)}>
               Nền trang
             </Button>
@@ -233,6 +252,17 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
       </div>
 
       {bgOpen && <BackgroundSettings sb={sb} onClose={() => setBgOpen(false)} />}
+
+      {cmtOpen && (
+        <CommentsManager
+          sb={sb}
+          onClose={() => {
+            setCmtOpen(false);
+            refreshPending();
+          }}
+          onChanged={refreshPending}
+        />
+      )}
 
       {editing && (
         <ReleaseEditor
