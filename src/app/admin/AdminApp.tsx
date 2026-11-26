@@ -174,7 +174,7 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="font-display text-3xl font-black">Kho phim</h1>
+            <h1 className="font-display text-3xl font-black">Kho bánh</h1>
             <p className="text-sm text-muted">{releases.length} bộ · thay đổi hiển thị trên trang chủ sau tối đa 60 giây</p>
           </div>
           <Button onClick={() => setEditing("new")}>
