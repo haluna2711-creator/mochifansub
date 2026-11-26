@@ -114,7 +114,7 @@ export default async function AnimePage({ params }: { params: Params }) {
                 <span className="h-8 w-2.5 rounded-full bg-gradient-to-b from-matcha to-matcha-deep" aria-hidden />
                 <h2 className="font-display text-xl font-black md:text-2xl">Link tải</h2>
               </div>
-              <DownloadCard torrent={r.torrents[0] ?? null} />
+              <DownloadCard torrent={r.torrents?.[0] ?? null} />
               <p className="mt-3 text-xs text-muted">
                 Mẹo: dùng qBittorrent hoặc uTorrent. Nhấn <b>Magnet</b> để mở trực tiếp, hoặc sao chép link.
               </p>
