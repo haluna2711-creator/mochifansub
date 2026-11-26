@@ -23,7 +23,7 @@ function parseMagnet(magnet: string) {
 type Form = { label: string; quality: string; size: string; sub_type: string; magnet: string; torrent_url: string };
 
 const toForm = (t: Torrent | null, release: Release): Form => ({
-  label: t?.label ?? (release.status === "completed" ? "Trọn bộ" : "Tập 01"),
+  label: t?.label ?? "Trọn bộ",
   quality: t?.quality ?? "1080p",
   size: t?.size ?? "",
   sub_type: t?.sub_type ?? "Softsub",
