@@ -20,7 +20,7 @@ export function Footer() {
         </div>
       </div>
       <p className="mx-auto max-w-7xl px-4 text-xs text-muted sm:px-6">
-        © {new Date().getFullYear()} Mochi Fansub · Sản phẩm phi lợi nhuận của nhóm dịch. Hãy ủng hộ bản quyền chính thức khi có thể. <span className="font-jp">ありがとう！</span>
+        © {new Date().getFullYear()} Mochi Fansub · Sản phẩm phi lợi nhuận của nhóm dịch. Hãy ủng hộ bản quyền chính thức khi có thể.
       </p>
     </footer>
   );

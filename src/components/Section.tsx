@@ -20,7 +20,6 @@ export function Section({
         <div className="flex items-center gap-3">
           <span className="h-9 w-2.5 rounded-full bg-gradient-to-b from-sakura to-sakura-deep" aria-hidden />
           <div>
-            {jp && <p className="font-jp text-xs font-bold tracking-[0.3em] text-sakura-deep">{jp}</p>}
             <h2 className="font-display text-2xl font-black tracking-tight md:text-[1.75rem]">{title}</h2>
           </div>
         </div>
