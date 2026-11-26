@@ -10,8 +10,6 @@ import { SearchTrigger } from "./SearchPalette";
 const links = [
   { href: "/", label: "Trang chủ" },
   { href: "/browse", label: "Khám phá" },
-  { href: "/browse?status=ongoing", label: "Đang chiếu" },
-  { href: "/browse?status=completed", label: "Trọn bộ" },
 ];
 
 export function Header() {
