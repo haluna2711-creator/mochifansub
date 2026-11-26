@@ -10,10 +10,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://mochi-fansub.vercel
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "Mochi Fansub — Anime Vietsub mềm như mochi", template: "%s · Mochi Fansub" },
-  description: "Mochi Fansub — nhóm dịch anime Vietsub. Tải torrent / magnet chất lượng cao 1080p, cập nhật mỗi tuần.",
-  applicationName: "Mochi Fansub",
-  openGraph: { type: "website", siteName: "Mochi Fansub", locale: "vi_VN" },
+  title: { default: "Tiệm bánh Mochi — Dẻo thơm một hạt, đắng cay muôn phần.", template: "%s · Tiệm bánh Mochi" },
+  description: "Tiệm bánh Mochi",
+  applicationName: "Tiệm bánh Mochi",
+  openGraph: { type: "website", siteName: "Tiệm bánh Mochi", locale: "vi_VN" },
   icons: { icon: "/icon.svg", apple: "/icon.svg" },
 };
 
