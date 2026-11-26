@@ -1,19 +1,17 @@
-import { getAllGenres, getFeatured, getLatestTorrents, getReleases } from "@/lib/data";
+import { getAllGenres, getFeatured, getReleases } from "@/lib/data";
 import { isSupabaseConfigured } from "@/lib/supabase";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { AnimeCard, AnimeGrid } from "@/components/AnimeCard";
-import { LatestTorrents } from "@/components/LatestTorrents";
 import { GenreChips, Section } from "@/components/Section";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [featured, latest, ongoing, completed, torrents, genres] = await Promise.all([
+  const [featured, latest, ongoing, completed, genres] = await Promise.all([
     getFeatured(),
     getReleases({ limit: 12 }),
     getReleases({ status: "ongoing", limit: 12 }),
     getReleases({ status: "completed", limit: 6 }),
-    getLatestTorrents(8),
     getAllGenres(),
   ]);
 
@@ -35,17 +33,13 @@ export default async function HomePage() {
         </div>
       )}
 
-      <div className="grid gap-x-10 lg:grid-cols-[1fr_24rem]">
+      <div>
         <Section title="Bánh mới hấp" jp="新着" href="/browse">
-          <div className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 md:grid-cols-4">
             {latest.slice(0, 8).map((r, i) => (
               <AnimeCard key={r.id} r={r} priority={i < 4} />
             ))}
           </div>
-        </Section>
-
-        <Section id="latest" title="Torrent mới" jp="トレント">
-          <LatestTorrents items={torrents} />
         </Section>
       </div>
 
