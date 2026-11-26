@@ -9,6 +9,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     { url: base, changeFrequency: "hourly", priority: 1 },
     { url: `${base}/browse`, changeFrequency: "daily", priority: 0.8 },
-    ...slugs.map((s) => ({ url: `${base}/anime/${s.slug}`, lastModified: s.updated_at, priority: 0.7 })),
+    ...slugs.map((s) => ({ url: `${base}/${s.slug}`, lastModified: s.updated_at, priority: 0.7 })),
   ];
 }
