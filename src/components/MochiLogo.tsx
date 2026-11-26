@@ -66,8 +66,9 @@ export function MochiLogo() {
       <span className="leading-none">
         <span className="block font-display text-[1.15rem] font-extrabold tracking-tight text-ink">
           Tiệm bánh<span className="text-sakura-deep"> Mochi</span>
-          <span className="mt-1 block text-[0.65rem] font-semibold tracking-wide text-muted">
-  Chỉ bán mang về
+        </span>
+        <span className="mt-1 block text-[0.65rem] font-semibold tracking-wide text-muted">
+          Chỉ bán mang về
         </span>
       </span>
     </span>
