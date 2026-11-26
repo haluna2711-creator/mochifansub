@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MochiLogo } from "./MochiLogo";
 import { ThemeToggle } from "./ThemeToggle";
-import { IconSearch } from "./Icons";
+import { SearchTrigger } from "./SearchPalette";
 
 const links = [
   { href: "/", label: "Trang chủ" },
@@ -16,8 +16,6 @@ const links = [
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [q, setQ] = useState("");
-  const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -59,34 +57,9 @@ export function Header() {
           })}
         </nav>
 
-        <form
-          role="search"
-          className="ml-auto hidden md:block"
-          onSubmit={(e) => {
-            e.preventDefault();
-            router.push(q.trim() ? `/browse?q=${encodeURIComponent(q.trim())}` : "/browse");
-          }}
-        >
-          <label className="group flex h-11 w-64 items-center gap-2 rounded-full bg-surface px-4 ring-1 ring-line transition-all focus-within:w-80 focus-within:ring-2 focus-within:ring-sakura">
-            <IconSearch className="h-4.5 w-4.5 text-muted" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Tìm phim…"
-              aria-label="Tìm phim"
-              className="w-full bg-transparent text-sm text-ink outline-none placeholder:text-muted"
-            />
-          </label>
-        </form>
+        <SearchTrigger />
 
-        <div className="ml-auto flex items-center gap-2 md:ml-0">
-          <Link
-            href="/browse?focus=1"
-            aria-label="Tìm kiếm"
-            className="press grid h-10 w-10 place-items-center rounded-full bg-surface text-ink ring-1 ring-line md:hidden"
-          >
-            <IconSearch />
-          </Link>
+        <div className="flex items-center gap-2">
           <ThemeToggle />
         </div>
       </div>

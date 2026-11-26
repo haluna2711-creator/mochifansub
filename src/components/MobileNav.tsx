@@ -4,12 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { IconGrid, IconHome, IconMagnet, IconSearch } from "./Icons";
+import { openSearch } from "./SearchPalette";
 
 const items = [
   { href: "/", label: "Trang chủ", icon: IconHome, match: (p: string) => p === "/" },
   { href: "/browse", label: "Khám phá", icon: IconGrid, match: (p: string) => p === "/browse" },
   { href: "/#latest", label: "Torrent mới", icon: IconMagnet, match: () => false },
-  { href: "/browse?focus=1", label: "Tìm kiếm", icon: IconSearch, match: () => false },
 ];
 
 /** Thanh điều hướng dạng "viên mochi" nổi ở đáy màn hình mobile; tự ẩn khi cuộn xuống. */
@@ -63,6 +63,16 @@ export function MobileNav() {
             </li>
           );
         })}
+        <li className="flex-1">
+          <button
+            type="button"
+            onClick={openSearch}
+            className="press flex w-full flex-col items-center gap-0.5 rounded-full py-2 text-[0.65rem] font-bold text-muted"
+          >
+            <IconSearch className="h-5 w-5" />
+            Tìm kiếm
+          </button>
+        </li>
       </ul>
     </nav>
   );

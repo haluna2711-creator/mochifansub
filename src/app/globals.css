@@ -219,6 +219,15 @@ body {
 }
 
 input, textarea, select { font: inherit; }
+/* Ô nhập đã có viền focus riêng ở khung bao → bỏ viền mặc định để không bị viền đôi */
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline: none; }
+input[type="search"]::-webkit-search-cancel-button { display: none; }
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
 :focus-visible {
   outline: 3px solid color-mix(in oklab, var(--sakura-deep) 60%, transparent);
   outline-offset: 2px;

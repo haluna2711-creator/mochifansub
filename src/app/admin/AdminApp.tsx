@@ -37,7 +37,7 @@ export function AdminApp() {
     return (
       <Shell>
         <Card>
-          <MochiFace className="mx-auto h-16 w-16" />
+          <MochiFace className="mx-auto h-16 w-16" mood="sad" />
           <h1 className="mt-4 text-center font-display text-xl font-black">Chưa kết nối Supabase</h1>
           <p className="mt-2 text-center text-sm text-muted">
             Thêm <code className="rounded bg-surface-2 px-1">NEXT_PUBLIC_SUPABASE_URL</code> và{" "}

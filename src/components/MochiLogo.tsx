@@ -1,4 +1,14 @@
-export function MochiFace({ className = "", blush = true }: { className?: string; blush?: boolean }) {
+export function MochiFace({
+  className = "",
+  blush = true,
+  mood = "happy",
+}: {
+  className?: string;
+  blush?: boolean;
+  /** happy: mặt cười · sad: mặt buồn (dùng khi lỗi / không có kết quả) */
+  mood?: "happy" | "sad";
+}) {
+  const sad = mood === "sad";
   return (
     <svg viewBox="0 0 64 56" className={className} aria-hidden="true">
       <defs>
@@ -15,9 +25,26 @@ export function MochiFace({ className = "", blush = true }: { className?: string
         strokeWidth="2"
       />
       <ellipse cx="22" cy="14" rx="7" ry="3.5" fill="#fff" opacity=".8" transform="rotate(-20 22 14)" />
-      <circle cx="23" cy="31" r="2.6" fill="#3b2a2e" />
-      <circle cx="41" cy="31" r="2.6" fill="#3b2a2e" />
-      <path d="M29 35.5q3 3 6 0" stroke="#3b2a2e" strokeWidth="2" fill="none" strokeLinecap="round" />
+      {sad ? (
+        <>
+          {/* lông mày cụp */}
+          <path d="M18.5 25.5l6.5-2" stroke="#3b2a2e" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M45.5 25.5l-6.5-2" stroke="#3b2a2e" strokeWidth="1.8" strokeLinecap="round" />
+          {/* mắt nhắm buồn */}
+          <path d="M19.5 31q3.5 2.6 7 0" stroke="#3b2a2e" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+          <path d="M37.5 31q3.5 2.6 7 0" stroke="#3b2a2e" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+          {/* miệng mếu */}
+          <path d="M28.5 39.5q3.5-3.2 7 0" stroke="#3b2a2e" strokeWidth="2" fill="none" strokeLinecap="round" />
+          {/* giọt nước mắt */}
+          <path d="M21 35.5c-1.6 2.6-2.3 4-2.3 5.1a2.3 2.3 0 0 0 4.6 0c0-1.1-.7-2.5-2.3-5.1Z" fill="#8ec9f0" stroke="#5fa8d9" strokeWidth=".8" />
+        </>
+      ) : (
+        <>
+          <circle cx="23" cy="31" r="2.6" fill="#3b2a2e" />
+          <circle cx="41" cy="31" r="2.6" fill="#3b2a2e" />
+          <path d="M29 35.5q3 3 6 0" stroke="#3b2a2e" strokeWidth="2" fill="none" strokeLinecap="round" />
+        </>
+      )}
       {blush && (
         <>
           <ellipse cx="17" cy="37" rx="4" ry="2.4" fill="#f48aa6" opacity=".55" />

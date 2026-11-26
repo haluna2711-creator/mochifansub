@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { MobileNav } from "@/components/MobileNav";
 import { Footer } from "@/components/Footer";
 import { themeScript } from "@/components/ThemeToggle";
+import { SearchPalette } from "@/components/SearchPalette";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://mochi-fansub.vercel.app";
 
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="main">{children}</main>
         <Footer />
         <MobileNav />
+        <SearchPalette />
       </body>
     </html>
   );
