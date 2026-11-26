@@ -107,6 +107,11 @@ body {
   background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat;
 }
 
+/* Đã đặt ảnh nền ở admin → bỏ texture giấy/gradient, chỉ giữ màu nền đặc phía sau ảnh */
+.mochi-bg.has-custom-bg {
+  background-image: none;
+}
+
 .shadow-mochi {
   box-shadow:
     0 1px 0 rgb(255 255 255 / 0.6) inset,

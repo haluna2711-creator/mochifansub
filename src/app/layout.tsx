@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { themeScript } from "@/components/ThemeToggle";
 import { SearchPalette } from "@/components/SearchPalette";
 import { SiteBackground } from "@/components/SiteBackground";
+import { getBackground } from "@/lib/siteSettings";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://mochi-fansub.vercel.app";
 
@@ -28,7 +29,8 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const bg = await getBackground();
   return (
     <html lang="vi" suppressHydrationWarning>
       <head>
@@ -41,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Nunito:wght@400;600;700;800;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap"
         />
       </head>
-      <body className="mochi-bg min-h-dvh">
+      <body className={`mochi-bg min-h-dvh${bg.url ? " has-custom-bg" : ""}`}>
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-surface focus:px-4 focus:py-2">
           Bỏ qua tới nội dung
         </a>
