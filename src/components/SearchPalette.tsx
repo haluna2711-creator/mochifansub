@@ -228,8 +228,8 @@ export function SearchPalette() {
           {items.length === 0 && !loading ? (
             <div className="flex flex-col items-center py-10 text-center">
               <MochiFace className="animate-wobble h-14 w-14" mood="sad" />
-              <p className="mt-3 font-display font-extrabold">Không tìm thấy phim nào</p>
-              <p className="text-sm text-muted">Thử gõ tên khác, hoặc bỏ dấu xem sao.</p>
+              <p className="mt-3 font-display font-extrabold">Tiệm chưa có loại bánh này</p>
+              <p className="text-sm text-muted">Thử hỏi loại bánh khác hoặc bỏ bớt bộ lọc nhé.</p>
             </div>
           ) : (
             <ul ref={listRef} className="space-y-1">
