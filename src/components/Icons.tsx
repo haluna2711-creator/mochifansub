@@ -57,3 +57,9 @@ export const IconX = ({ className = "h-5 w-5" }: P) => (
 export const IconSparkle = ({ className = "h-4 w-4" }: P) => (
   <svg {...base} className={className}><path d="M12 3c.6 4.2 2.8 6.4 7 7-4.2.6-6.4 2.8-7 7-.6-4.2-2.8-6.4-7-7 4.2-.6 6.4-2.8 7-7Z" /></svg>
 );
+
+export const IconHeart = ({ className = "h-5 w-5", filled = false }: P & { filled?: boolean }) => (
+  <svg {...base} fill={filled ? "currentColor" : "none"} className={className}>
+    <path d="M12 20.5s-7.5-4.6-9.3-9.4C1.6 8 3.4 4.9 6.5 4.6c1.9-.2 3.9.8 5.5 3 1.6-2.2 3.6-3.2 5.5-3 3.1.3 4.9 3.4 3.8 6.5-1.8 4.8-9.3 9.4-9.3 9.4Z" />
+  </svg>
+);
