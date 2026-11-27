@@ -22,6 +22,6 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  // Bỏ qua: /gate, /admin (có đăng nhập riêng), /api, file tĩnh (có dấu chấm), _next
-  matcher: ["/((?!gate|admin|api|_next|.*\\..*).*)"],
+  // Bỏ qua: /gate, /quy-dinh (công khai), /admin (có đăng nhập riêng), /api, file tĩnh (có dấu chấm), _next
+  matcher: ["/((?!gate|admin|quy-dinh|api|_next|.*\\..*).*)"],
 };
