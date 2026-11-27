@@ -275,9 +275,6 @@ export function Gate({ bgUrl }: { bgUrl: string }) {
           <h1 className="font-display text-5xl font-black text-white drop-shadow-[0_2px_24px_rgba(120,60,80,.6)] sm:text-6xl md:text-7xl">
             Tiệm Bánh Mochi
           </h1>
-          <p className="mt-3 text-lg font-bold text-white drop-shadow-[0_1px_12px_rgba(120,60,80,.6)] md:text-xl">
-            Mùa đông nhỏ xinh, bánh ngọt còn ấm.
-          </p>
         </div>
         <button
           type="button"
