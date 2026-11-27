@@ -12,6 +12,8 @@ export function AuthGuard() {
 
   useEffect(() => {
     if (GATE_DISABLED) return;
+    // Dọn phiên cũ còn sót trong localStorage (trước đây phiên được lưu lâu dài)
+    try { localStorage.removeItem("mochi-auth"); } catch {}
     const sb = getBrowserSupabase();
     if (!sb) return;
     const exempt = /^\/(gate|admin)(\/|$)/.test(pathname);
