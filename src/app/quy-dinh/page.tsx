@@ -44,6 +44,9 @@ const RULES: { title: string; body: string; penalty?: string }[] = [
   },
 ];
 
+const RULES_NOTE =
+  "Lưu ý nhỏ: Khi khách hàng bước vào tiệm và nhận bánh đồng nghĩa với việc đã đồng ý với toàn bộ quy tắc trên.";
+
 export const metadata: Metadata = {
   title: "Quy định của tiệm",
   robots: { index: false, follow: false },
