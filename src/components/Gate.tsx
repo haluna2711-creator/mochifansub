@@ -8,6 +8,7 @@ import { getBrowserSupabase } from "@/lib/supabase";
 import { clearGateCookie, safeNext, setGateCookie } from "@/lib/gate";
 import { gateOverlayCss } from "@/lib/siteSettings";
 import { MochiFace } from "./MochiLogo";
+import { AnimatedLogo } from "./AnimatedLogo";
 
 type View = "signup" | "login" | "forgot" | "reset" | "member";
 type Msg = { text: string; ok: boolean };
@@ -343,10 +344,7 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
         <div aria-hidden className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("${bgUrl}")` }} />
         <div aria-hidden className="absolute inset-0" style={{ backgroundImage: gateOverlayCss(overlay) }} />
         <div className="relative">
-          <MochiFace className="animate-wobble mx-auto mb-4 h-20 w-20 drop-shadow-lg" />
-          <h1 className="font-display text-5xl font-black text-white drop-shadow-[0_2px_24px_rgba(120,60,80,.6)] sm:text-6xl md:text-7xl">
-            Tiệm Bánh Mochi
-          </h1>
+          <AnimatedLogo />
         </div>
         <button
           type="button"
