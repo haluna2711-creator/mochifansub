@@ -111,7 +111,7 @@ export function HeroCarousel({ items }: { items: Release[] }) {
                 tabIndex={-1}
                 className="squish relative ml-auto hidden aspect-[2/3] w-52 shrink-0 overflow-hidden rounded-[1.75rem] shadow-2xl ring-4 ring-white/40 md:block lg:w-60"
               >
-                <Cover src={r.cover_url} title={r.title} titleJp={r.title_jp} sizes="240px" priority={i === 0} />
+                <Cover src={r.cover_url} title={r.title} titleJp={r.title_jp} sizes="480px" priority={i === 0} />
               </Link>
             </div>
           </article>
