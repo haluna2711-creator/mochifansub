@@ -5,6 +5,8 @@ export interface PublicComment {
   reply: string | null;
   replied_at: string | null;
   created_at: string;
+  /** Link ảnh đại diện của người bình luận (nếu có) */
+  avatar_url?: string | null;
 }
 
 export const COMMENT_MAX = 1000;
