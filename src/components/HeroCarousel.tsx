@@ -61,7 +61,7 @@ export function HeroCarousel({ items }: { items: Release[] }) {
             key={r.id}
             aria-roledescription="slide"
             aria-label={`${i + 1} / ${items.length}`}
-            className="shadow-mochi relative isolate min-h-[25rem] overflow-hidden rounded-[2rem] ring-1 ring-line md:min-h-[27rem] md:rounded-[2.5rem]"
+            className="shadow-mochi relative isolate min-h-[25rem] overflow-hidden rounded-[2rem] ring-1 ring-line md:min-h-[28rem] lg:min-h-[32rem] md:rounded-[2.5rem]"
           >
             {/* nền */}
             <div className="absolute inset-0 -z-10">
@@ -70,6 +70,7 @@ export function HeroCarousel({ items }: { items: Release[] }) {
                 title={r.title}
                 titleJp={r.title_jp}
                 variant="banner"
+                position="50% 20%"
                 priority={i === 0}
                 sizes="(max-width: 1280px) 100vw, 1280px"
                 className={!r.banner_url && r.cover_url ? "scale-110 blur-2xl" : ""}
@@ -77,7 +78,7 @@ export function HeroCarousel({ items }: { items: Release[] }) {
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent md:bg-gradient-to-r md:from-black/70 md:via-black/30" />
             </div>
 
-            <div className="flex h-full min-h-[25rem] items-end gap-8 p-6 pb-14 sm:p-8 sm:pb-14 md:min-h-[27rem] md:items-center md:p-12">
+            <div className="flex h-full min-h-[25rem] items-end gap-8 p-6 pb-14 sm:p-8 sm:pb-14 md:min-h-[28rem] lg:min-h-[32rem] md:items-center md:p-12">
               <div className="max-w-xl text-white">
                 <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-extrabold backdrop-blur-md">
                   <IconSparkle className="h-3.5 w-3.5 text-yuzu" /> Nổi bật · {STATUS_LABEL[r.status]}
