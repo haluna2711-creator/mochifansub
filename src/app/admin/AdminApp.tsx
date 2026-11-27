@@ -15,6 +15,7 @@ import { ReleaseEditor } from "./ReleaseEditor";
 import { BackgroundSettings } from "./BackgroundSettings";
 import { GateBackgroundSettings } from "./GateBackgroundSettings";
 import { SignupSettings } from "./SignupSettings";
+import { MembersManager } from "./MembersManager";
 import { CommentsManager, countPending } from "./CommentsManager";
 
 type AdminState = "loading" | "anon" | "not-admin" | "admin";
@@ -143,6 +144,7 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
   const [bgOpen, setBgOpen] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
+  const [membersOpen, setMembersOpen] = useState(false);
   const [cmtOpen, setCmtOpen] = useState(false);
   const [pending, setPending] = useState(0);
 
@@ -194,6 +196,9 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
             </Button>
             <Button variant="ghost" className="h-10 px-4" onClick={() => setGateOpen(true)}>
               Nền cổng
+            </Button>
+            <Button variant="ghost" className="h-10 px-4" onClick={() => setMembersOpen(true)}>
+              Thành viên
             </Button>
             <Button variant="ghost" className="h-10 px-4" onClick={() => setSignupOpen(true)}>
               Đăng ký
@@ -264,6 +269,7 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
       {bgOpen && <BackgroundSettings sb={sb} onClose={() => setBgOpen(false)} />}
       {gateOpen && <GateBackgroundSettings sb={sb} onClose={() => setGateOpen(false)} />}
       {signupOpen && <SignupSettings sb={sb} onClose={() => setSignupOpen(false)} />}
+      {membersOpen && <MembersManager sb={sb} onClose={() => setMembersOpen(false)} />}
 
       {cmtOpen && (
         <CommentsManager
