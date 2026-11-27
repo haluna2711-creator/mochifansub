@@ -52,6 +52,10 @@ const TERMS: { title: string; body: string; penalty?: string }[] = [
     title: "Quyền quyết định cao nhất thuộc về Chủ Tiệm",
     body: "Trong mọi tình huống phát sinh hoặc tranh chấp, quyết định của chủ tiệm là quyết định cuối cùng nhằm bảo vệ sự tồn vong của cả tiệm.",
   },
+   {
+    title: "30 ngày để ghé tiệm",
+    body: "Quý khách có 30 ngày để ghé tiệm, sau đó nếu không có lịch sử ghé qua, quý khách sẽ không còn được cấp phép để ghé tiệm nữa. Trong vòng 2 năm nếu quý khách không còn mặn mà ghé tiệm nữa, tài khoản của quý khách cũng sẽ đem đi bỏ tủ đông.",
+  },
 ];
 const TERMS_NOTE =
   "Lưu ý nhỏ: Khi khách hàng bước vào tiệm và nhận bánh đồng nghĩa với việc đã đồng ý với toàn bộ quy tắc trên.";
