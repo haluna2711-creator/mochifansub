@@ -9,6 +9,7 @@ import { SiteBackground } from "@/components/SiteBackground";
 import { getBackground } from "@/lib/siteSettings";
 import { AuthGuard } from "@/components/AuthGuard";
 import { ChromeOnly } from "@/components/ChromeOnly";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://mochi-fansub.vercel.app";
 
@@ -58,6 +59,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <ChromeOnly>
           <Footer />
           <MobileNav />
+          <ScrollToTop />
           <SearchPalette />
         </ChromeOnly>
       </body>
