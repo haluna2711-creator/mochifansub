@@ -62,6 +62,7 @@ export default async function AnimePage({ params }: { params: Params }) {
           title={r.title}
           titleJp={r.title_jp}
           variant="banner"
+          position="50% 20%"
           priority
           sizes="100vw"
           className={!r.banner_url && r.cover_url ? "scale-125 blur-3xl" : ""}
