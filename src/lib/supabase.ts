@@ -33,7 +33,13 @@ export function getBrowserSupabase(): SupabaseClient | null {
   if (!isSupabaseConfigured) return null;
   if (!browserClient) {
     browserClient = createClient(url!, anonKey!, {
-      auth: { persistSession: true, autoRefreshToken: true, storageKey: "mochi-auth" },
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        storageKey: "mochi-auth",
+        // sessionStorage tự xóa khi đóng tab/trình duyệt → phải đăng nhập lại
+        storage: typeof window !== "undefined" ? window.sessionStorage : undefined,
+      },
     });
   }
   return browserClient;
