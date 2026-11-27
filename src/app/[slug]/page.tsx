@@ -82,7 +82,7 @@ export default async function AnimePage({ params }: { params: Params }) {
           {/* Poster */}
           <div className="animate-rise mx-auto w-44 md:mx-0 md:w-full">
             <div className="shadow-mochi relative aspect-[2/3] overflow-hidden rounded-[2rem] ring-4 ring-surface">
-              <Cover src={r.cover_url} title={r.title} titleJp={r.title_jp} sizes="(max-width: 768px) 176px, 272px" priority />
+              <Cover src={r.cover_url} title={r.title} titleJp={r.title_jp} sizes="(max-width: 768px) 352px, 544px" priority />
             </div>
             <FavoriteButton releaseId={r.id} />
           </div>
