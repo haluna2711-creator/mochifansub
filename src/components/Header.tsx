@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { MochiLogo } from "./MochiLogo";
 import { ThemeToggle } from "./ThemeToggle";
 import { SearchTrigger } from "./SearchPalette";
+import { UserChip } from "./UserChip";
 
 const links = [
   { href: "/", label: "Cửa tiệm" },
@@ -59,6 +60,7 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
+          <UserChip />
         </div>
       </div>
     </header>
