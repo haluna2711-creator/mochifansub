@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { Session } from "@supabase/supabase-js";
 import { getBrowserSupabase } from "@/lib/supabase";
 import { clearGateCookie, safeNext, setGateCookie } from "@/lib/gate";
+import { gateOverlayCss } from "@/lib/siteSettings";
 import { MochiFace } from "./MochiLogo";
 
 type View = "signup" | "login" | "forgot" | "reset" | "member";
@@ -38,7 +39,7 @@ const TERMS: { title: string; body: string; penalty?: string }[] = [
   },
   {
     title: "“Ăn bánh nhớ giữ lửa”",
-    body: "Bánh ở tiệm được làm theo hình thức chia sẻ ngang hàng. Sau khi nhận bánh xong, vui lòng giữ nguyên “vỏ túi bánh” trong nhà ít nhất 24–48 giờ hoặc đạt tỷ lệ chia sẻ tối thiểu 1.0 để những vị khách đến sau cũng có thể thưởng thức trọn vẹn. Tránh tình trạng ăn xong vứt ngay.",
+    body: "Bánh ở tiệm được làm theo hình thức chia sẻ ngang hàng. Sau khi nhận bánh xong, vui lòng giữ nguyên “vỏ túi bánh” trong ứng dụng ít nhất 24–48 giờ hoặc đạt tỷ lệ chia sẻ tối thiểu 1.0 để những vị khách đến sau cũng có thể thưởng thức trọn vẹn. Tránh tình trạng ăn xong vứt ngay.",
   },
   {
     title: "Không mang “công thức” đi nơi khác & không thương mại hóa",
@@ -52,10 +53,6 @@ const TERMS: { title: string; body: string; penalty?: string }[] = [
     title: "Quyền quyết định cao nhất thuộc về Chủ Tiệm",
     body: "Trong mọi tình huống phát sinh hoặc tranh chấp, quyết định của chủ tiệm là quyết định cuối cùng nhằm bảo vệ sự tồn vong của cả tiệm.",
   },
-   {
-    title: "30 ngày để ghé tiệm",
-    body: "Khách hàng có 30 ngày để ghé tiệm, sau đó nếu không có lịch sử ghé qua bạn sẽ không còn được cấp phép để ghé tiệm nữa. Trong vòng 2 năm nếu khách hàng không còn mặn mà ghé tiệm thì cũng sẽ đưa khách hàng đi cấp đông.",
-  },
 ];
 const TERMS_NOTE =
   "Lưu ý nhỏ: Khi khách hàng bước vào tiệm và nhận bánh đồng nghĩa với việc đã đồng ý với toàn bộ quy tắc trên.";
@@ -68,7 +65,7 @@ const SIGNUP_ERRORS: Record<string, string> = {
   exists: "Email này đã có tài khoản. Hãy đăng nhập.",
 };
 
-export function Gate({ bgUrl }: { bgUrl: string }) {
+export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number }) {
   const router = useRouter();
   const sb = getBrowserSupabase();
 
@@ -269,12 +266,15 @@ export function Gate({ bgUrl }: { bgUrl: string }) {
       {/* Trang bìa */}
       <header className="relative grid min-h-dvh place-items-center overflow-hidden bg-[#f6d9de] p-8 text-center">
         <div aria-hidden className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("${bgUrl}")` }} />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[#7a3c50]/25 via-transparent to-[#7a3c50]/40" />
+        <div aria-hidden className="absolute inset-0" style={{ backgroundImage: gateOverlayCss(overlay) }} />
         <div className="relative">
           <MochiFace className="animate-wobble mx-auto mb-4 h-20 w-20 drop-shadow-lg" />
           <h1 className="font-display text-5xl font-black text-white drop-shadow-[0_2px_24px_rgba(120,60,80,.6)] sm:text-6xl md:text-7xl">
             Tiệm Bánh Mochi
           </h1>
+          <p className="mt-3 text-lg font-bold text-white drop-shadow-[0_1px_12px_rgba(120,60,80,.6)] md:text-xl">
+            Mùa đông nhỏ xinh, bánh ngọt còn ấm.
+          </p>
         </div>
         <button
           type="button"
