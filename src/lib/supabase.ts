@@ -26,6 +26,15 @@ export function getServerSupabase(): SupabaseClient | null {
   });
 }
 
+/** Client chạy với quyền của một thành viên (gắn JWT của họ) — dùng trong API route. */
+export function getUserSupabase(token: string): SupabaseClient | null {
+  if (!isSupabaseConfigured) return null;
+  return createClient(url!, anonKey!, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: { headers: { Authorization: `Bearer ${token}` } },
+  });
+}
+
 let browserClient: SupabaseClient | null = null;
 
 /** Client cho trình duyệt (trang admin): giữ phiên đăng nhập. */
