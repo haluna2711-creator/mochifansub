@@ -55,7 +55,7 @@ const TERMS: { title: string; body: string; penalty?: string }[] = [
   },
   {
     title: "30 ngày để ghé tiệm",
-    body: "Khách hàng có 30 ngày để ghé tiệm, sau đó nếu không có lịch sự ghé qua thì khách hàng sẽ bị tước quyền vào tiệm. Trong vòng 2 năm, nếu khách hàng không còn mặn mà ghé tiệm nữa thì khách hàng sẽ được đem đi cấp đông.",
+    body: "Khách hàng có 30 ngày để ghé tiệm, sau đó nếu không có lịch sử ghé qua thì khách hàng sẽ bị tước quyền vào tiệm. Trong vòng 2 năm, nếu khách hàng không còn mặn mà ghé tiệm nữa thì khách hàng sẽ được đem đi cấp đông.",
   },
 ];
 const TERMS_NOTE =
