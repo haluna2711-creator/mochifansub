@@ -14,8 +14,6 @@ export function Footer() {
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-muted">
           <Link href="/browse" className="hover:text-sakura-deep">Tủ bánh</Link>
-          <Link href="/browse?status=ongoing" className="hover:text-sakura-deep">Đang hấp</Link>
-          <Link href="/browse?status=completed" className="hover:text-sakura-deep">Bánh đủ vị</Link>
           <Link href="/quy-dinh" className="hover:text-sakura-deep">Quy định</Link>
           <Link href="/gate" className="hover:text-sakura-deep">Tài khoản</Link>
         </div>
