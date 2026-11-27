@@ -4,12 +4,10 @@ export const GATE_COOKIE = "mochi-in";
 /** Đặt NEXT_PUBLIC_GATE_DISABLED=1 trên Vercel (rồi Redeploy) để tắt cổng khi cần. */
 export const GATE_DISABLED = process.env.NEXT_PUBLIC_GATE_DISABLED === "1";
 
-const MAX_AGE = 60 * 60 * 24 * 30; // 30 ngày, được gia hạn mỗi lần mở trang
-
 export function setGateCookie() {
   if (typeof document === "undefined") return;
   const secure = location.protocol === "https:" ? "; Secure" : "";
-  document.cookie = `${GATE_COOKIE}=1; Path=/; Max-Age=${MAX_AGE}; SameSite=Lax${secure}`;
+  document.cookie = `${GATE_COOKIE}=1; Path=/; SameSite=Lax${secure}`;
 }
 
 export function clearGateCookie() {
