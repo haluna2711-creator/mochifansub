@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Gate } from "@/components/Gate";
-import { getBackground } from "@/lib/siteSettings";
+import { GATE_DEFAULT_IMAGE, getGateBackground } from "@/lib/siteSettings";
 
 export const metadata: Metadata = {
   title: "Cổng tiệm bánh",
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default async function GatePage() {
-  const bg = await getBackground();
-  return <Gate bgUrl={bg.url || "/assets/default-bg.png"} />;
+  const bg = await getGateBackground();
+  return <Gate bgUrl={bg.url || GATE_DEFAULT_IMAGE} overlay={bg.overlay} />;
 }
