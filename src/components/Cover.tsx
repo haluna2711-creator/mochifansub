@@ -12,10 +12,12 @@ interface Props {
   variant?: "poster" | "banner";
   /** Hiện tên phim trên bìa giữ chỗ (tắt khi tên đã hiển thị bên dưới thẻ). */
   showTitle?: boolean;
+  /** Chất lượng nén khi Next tối ưu ảnh (mặc định 90, cần có trong images.qualities). */
+  quality?: 75 | 90;
 }
 
 /** Ảnh bìa phim; nếu chưa có ảnh sẽ hiện bìa pastel kiểu mochi tự sinh. */
-export function Cover({ src, title, titleJp, sizes, priority, className = "", variant = "poster", showTitle = true }: Props) {
+export function Cover({ src, title, titleJp, sizes, priority, className = "", variant = "poster", showTitle = true, quality = 90 }: Props) {
   if (src) {
     return (
       <Image
@@ -23,6 +25,7 @@ export function Cover({ src, title, titleJp, sizes, priority, className = "", va
         alt={title}
         fill
         sizes={sizes}
+        quality={quality}
         priority={priority}
         className={`object-cover ${className}`}
       />
