@@ -16,7 +16,7 @@ export function AuthGuard() {
     try { localStorage.removeItem("mochi-auth"); } catch {}
     const sb = getBrowserSupabase();
     if (!sb) return;
-    const exempt = /^\/(gate|admin)(\/|$)/.test(pathname);
+    const exempt = /^\/(gate|admin|quy-dinh)(\/|$)/.test(pathname);
 
     const sync = (signedIn: boolean) => {
       if (signedIn) return setGateCookie();
