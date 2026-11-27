@@ -70,6 +70,9 @@ const SIGNUP_ERRORS: Record<string, string> = {
   closed: "Tiệm tạm ngưng nhận khách mới. Bạn quay lại sau nhé!",
 };
 
+/** Nhắc khách tìm thư trong mục Thư rác (thư gửi từ Gmail dễ bị rơi vào đó) */
+const SPAM_HINT = "Không thấy thư? Hãy kiểm tra mục Thư rác (Spam) nhé.";
+
 export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number }) {
   const router = useRouter();
   const sb = getBrowserSupabase();
@@ -200,7 +203,10 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
       return;
     }
     if (data.session) return enter();
-    setMsg({ text: "Đã tạo tài khoản! Hãy kiểm tra email để xác nhận, rồi đăng nhập.", ok: true });
+    setMsg({
+      text: `Đã tạo tài khoản! Hãy kiểm tra email để xác nhận, rồi đăng nhập. ${SPAM_HINT}`,
+      ok: true,
+    });
     form.reset();
     setAgree(false);
     loadQuota();
@@ -219,7 +225,7 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
     setBusy(false);
     if (error) {
       const text = /not confirmed/i.test(error.message)
-        ? "Email chưa được xác nhận. Hãy mở email và bấm vào liên kết trong thư."
+        ? `Email chưa được xác nhận. Hãy mở email và bấm vào liên kết trong thư (nhớ xem cả mục Thư rác).`
         : "Email hoặc mật khẩu chưa đúng, hoặc tài khoản đã bị khóa.";
       return setMsg({ text, ok: false });
     }
@@ -239,7 +245,7 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
     setMsg(
       error
         ? { text: `Chưa gửi được: ${error.message}`, ok: false }
-        : { text: "Đã gửi liên kết. Hãy kiểm tra email.", ok: true },
+        : { text: `Đã gửi liên kết. Hãy kiểm tra email. ${SPAM_HINT}`, ok: true },
     );
   };
 
