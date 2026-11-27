@@ -21,6 +21,42 @@ const btnGhost =
   "press mt-3 w-full rounded-full bg-surface-2 py-3 font-extrabold text-ink ring-1 ring-line";
 const linkCls = "font-bold text-sakura-deep underline underline-offset-2";
 
+/* ===== NỘI DUNG NỘI QUY TIỆM BÁNH — sửa ở đây ===== */
+const TERMS_TITLE = "Nội quy tiệm bánh";
+const TERMS_INTRO =
+  "Chào mừng bạn ghé thăm tiệm. Để tiệm luôn giữ được sự ấm cúng, an toàn và duy trì “lò nướng” hoạt động lâu dài, vui lòng đọc kỹ và tuân thủ các quy tắc sau trước khi thưởng thức bánh:";
+const TERMS: { title: string; body: string; penalty?: string }[] = [
+  {
+    title: "Tuyệt đối bảo mật không gian tiệm",
+    body: "Tiệm hoạt động hoàn toàn kín đáo. Nghiêm cấm khách hàng chụp ảnh màn hình, quay video hay chia sẻ công khai bất kỳ thông tin, hình ảnh hoặc “công thức bánh” nào của tiệm lên mạng xã hội, các diễn đàn, website hay blog khác.",
+    penalty: "Chỉ cần chủ tiệm phát hiện dấu hiệu rò rỉ ra bên ngoài, tiệm sẽ lập tức đóng cửa vĩnh viễn và mời toàn bộ khách hàng ra khỏi tiệm không báo trước.",
+  },
+  {
+    title: "Giao tiếp văn minh, tôn trọng lẫn nhau",
+    body: "Không toxic, không bình luận tiêu cực ác ý, công kích cá nhân hay sử dụng ngôn từ thô tục, nhạy cảm bị cấm.",
+    penalty: "Tài khoản vi phạm sẽ bị cấm cửa ngay lập tức mà không cần nhắc nhở.",
+  },
+  {
+    title: "“Ăn bánh nhớ giữ lửa”",
+    body: "Bánh ở tiệm được làm theo hình thức chia sẻ ngang hàng. Sau khi nhận bánh xong, vui lòng giữ nguyên “vỏ túi bánh” trong ứng dụng ít nhất 24–48 giờ hoặc đạt tỷ lệ chia sẻ tối thiểu 1.0 để những vị khách đến sau cũng có thể thưởng thức trọn vẹn. Tránh tình trạng ăn xong vứt ngay.",
+  },
+  {
+    title: "Không mang “công thức” đi nơi khác & không thương mại hóa",
+    body: "Tuyệt đối không tự ý sao chép bánh gửi cho người lạ ngoài tiệm, không re-up lên các nền tảng xem trực tuyến công khai và nghiêm cấm mọi hành vi mua bán, trao đổi thương mại dưới mọi hình thức.",
+  },
+  {
+    title: "Không bàn luận chính trị, tôn giáo và các vấn đề nhạy cảm",
+    body: "Khu vực trò chuyện chỉ dành để đánh giá hương vị bánh, đề xuất món mới hoặc trao đổi kỹ thuật. Mọi chủ đề gây tranh cãi, kích động thù địch hoặc vi phạm pháp luật đều không được hoan nghênh.",
+  },
+  {
+    title: "Quyền quyết định cao nhất thuộc về Chủ Tiệm",
+    body: "Trong mọi tình huống phát sinh hoặc tranh chấp, quyết định của chủ tiệm là quyết định cuối cùng nhằm bảo vệ sự tồn vong của cả tiệm.",
+  },
+];
+const TERMS_NOTE =
+  "Lưu ý nhỏ: Khi khách hàng bước vào tiệm và nhận bánh đồng nghĩa với việc đã đồng ý với toàn bộ quy tắc trên.";
+/* ==================================================== */
+
 const SIGNUP_ERRORS: Record<string, string> = {
   full: "Hôm nay tiệm đã đủ khách. Vui lòng ghé tiệm bánh vào ngày mai.",
   blocked: "Email này đã bị khóa, không thể đăng ký lại.",
@@ -112,6 +148,10 @@ export function Gate({ bgUrl }: { bgUrl: string }) {
   const onSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!sb || busy) return;
+    if (!agree) {
+      setMsg({ text: "Bạn cần mở nội quy tiệm bánh, đọc và bấm “Tôi đồng ý” trước nhé.", ok: false });
+      return;
+    }
     const form = e.currentTarget;
     const fd = new FormData(form);
     const email = String(fd.get("email") ?? "").trim();
@@ -323,20 +363,30 @@ export function Gate({ bgUrl }: { bgUrl: string }) {
                   <label htmlFor="g-pass" className={label}>Mật khẩu</label>
                   <input id="g-pass" name="password" type="password" required minLength={8} autoComplete="new-password" className={input} />
 
-                  <label className="mt-4 flex cursor-pointer items-start gap-2.5 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={agree}
-                      onChange={(e) => setAgree(e.target.checked)}
-                      className="mt-1 h-4 w-4 shrink-0 accent-[var(--color-sakura-deep,#e56b8a)]"
-                    />
-                    <span>
-                      Tôi đã đọc và đồng ý với{" "}
-                      <button type="button" className={linkCls} onClick={() => dlg.current?.showModal()}>
-                        quy định người dùng
-                      </button>
+                  <button
+                    type="button"
+                    role="checkbox"
+                    aria-checked={agree}
+                    onClick={() => dlg.current?.showModal()}
+                    className="mt-4 flex w-full items-start gap-2.5 text-left text-sm"
+                  >
+                    <span
+                      aria-hidden
+                      className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md ring-1 transition ${
+                        agree ? "bg-sakura-deep text-white ring-sakura-deep" : "bg-bg ring-line"
+                      }`}
+                    >
+                      {agree && (
+                        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="m5 12.5 4.5 4.5L19 7.5" />
+                        </svg>
+                      )}
                     </span>
-                  </label>
+                    <span>
+                      {agree ? "Đã đồng ý " : "Bấm để đọc và đồng ý "}
+                      <span className={linkCls}>nội quy tiệm bánh</span>
+                    </span>
+                  </button>
 
                   <button type="submit" disabled={busy || !agree} className={btn}>
                     {busy ? "Đang xử lý…" : "Tạo tài khoản"}
@@ -404,30 +454,42 @@ export function Gate({ bgUrl }: { bgUrl: string }) {
       <dialog
         ref={dlg}
         aria-labelledby="terms-title"
-        className="m-auto w-[92%] max-w-lg rounded-[1.75rem] bg-surface p-7 text-ink shadow-2xl ring-1 ring-line backdrop:bg-[#3b2a2e]/55"
+        className="m-auto w-[92%] max-w-lg overflow-hidden rounded-[1.75rem] bg-surface p-0 text-ink shadow-2xl ring-1 ring-line backdrop:bg-[#3b2a2e]/55"
       >
-        <h3 id="terms-title" className="font-display text-xl font-black">Quy định người dùng</h3>
-        <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed">
-          <li>Mỗi ngày tiệm chỉ nhận <b>10</b> tài khoản mới. Hết lượt, vui lòng quay lại vào ngày mai.</li>
-          <li>Tài khoản đăng ký nhưng <b>không đăng nhập trong 1 tháng</b> sẽ bị xóa.</li>
-          <li>Tài khoản <b>2 năm không đăng nhập</b> sẽ bị khóa. Email đã khóa không thể đăng ký lại.</li>
-          <li>Dữ liệu tài khoản bị khóa sẽ được xóa hẳn sau <b>5 năm</b>.</li>
-          <li>Bình luận văn minh, không spam, không xúc phạm người khác.</li>
-        </ol>
-        <div className="mt-5 flex justify-end gap-2">
-          <button type="button" className="press rounded-full bg-surface-2 px-5 py-2.5 font-extrabold ring-1 ring-line" onClick={() => dlg.current?.close()}>
-            Đóng
-          </button>
-          <button
-            type="button"
-            className="press rounded-full bg-sakura-deep px-5 py-2.5 font-extrabold text-white"
-            onClick={() => {
-              setAgree(true);
-              dlg.current?.close();
-            }}
-          >
-            Tôi đồng ý
-          </button>
+        <div className="flex max-h-[88dvh] flex-col">
+          <div className="overflow-y-auto overscroll-contain px-7 pb-4 pt-7">
+            <h3 id="terms-title" className="font-display text-xl font-black uppercase">{TERMS_TITLE}</h3>
+            <p className="mt-3 text-sm leading-relaxed">{TERMS_INTRO}</p>
+            <ol className="mt-4 list-decimal space-y-4 pl-5 text-sm leading-relaxed marker:font-extrabold">
+              {TERMS.map((t) => (
+                <li key={t.title}>
+                  <p className="font-extrabold">{t.title}</p>
+                  <p className="mt-0.5">{t.body}</p>
+                  {t.penalty && (
+                    <p className="mt-1.5 rounded-xl bg-sakura-deep/10 px-3 py-2">
+                      <b className="text-sakura-deep">Hình phạt:</b> {t.penalty}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ol>
+            <p className="mt-5 text-sm font-bold leading-relaxed">{TERMS_NOTE}</p>
+          </div>
+          <div className="flex justify-end gap-2 border-t border-line bg-surface px-7 py-4">
+            <button type="button" className="press rounded-full bg-surface-2 px-5 py-2.5 font-extrabold ring-1 ring-line" onClick={() => dlg.current?.close()}>
+              Đóng
+            </button>
+            <button
+              type="button"
+              className="press rounded-full bg-sakura-deep px-5 py-2.5 font-extrabold text-white"
+              onClick={() => {
+                setAgree(true);
+                dlg.current?.close();
+              }}
+            >
+              Tôi đồng ý
+            </button>
+          </div>
         </div>
       </dialog>
     </div>
