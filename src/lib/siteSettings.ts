@@ -113,3 +113,20 @@ async function loadGateBackground(): Promise<GateBackground> {
 
 // Đổi ở admin sẽ hiện ở trang cổng sau tối đa 60 giây
 export const getGateBackground = unstable_cache(loadGateBackground, ["gate-background"], { revalidate: 60 });
+
+/* ---------- Bật / tắt đăng ký mới ---------- */
+
+export const SIGNUP_KEY = "signup";
+
+export interface SignupSetting {
+  /** true = cho phép tạo tài khoản mới, false = đóng đăng ký. */
+  enabled: boolean;
+}
+
+export const DEFAULT_SIGNUP: SignupSetting = { enabled: true };
+
+/** Thiếu hoặc sai dữ liệu → coi như đang mở (giống hàm public.signup_open() trong DB). */
+export function sanitizeSignup(raw: unknown): SignupSetting {
+  const r = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
+  return { enabled: r.enabled !== false };
+}
