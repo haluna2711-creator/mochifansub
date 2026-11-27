@@ -38,7 +38,7 @@ const TERMS: { title: string; body: string; penalty?: string }[] = [
   },
   {
     title: "“Ăn bánh nhớ giữ lửa”",
-    body: "Bánh ở tiệm được làm theo hình thức chia sẻ ngang hàng. Sau khi nhận bánh xong, vui lòng giữ nguyên “vỏ túi bánh” trong ứng dụng ít nhất 24–48 giờ hoặc đạt tỷ lệ chia sẻ tối thiểu 1.0 để những vị khách đến sau cũng có thể thưởng thức trọn vẹn. Tránh tình trạng ăn xong vứt ngay.",
+    body: "Bánh ở tiệm được làm theo hình thức chia sẻ ngang hàng. Sau khi nhận bánh xong, vui lòng giữ nguyên “vỏ túi bánh” trong nhà ít nhất 24–48 giờ hoặc đạt tỷ lệ chia sẻ tối thiểu 1.0 để những vị khách đến sau cũng có thể thưởng thức trọn vẹn. Tránh tình trạng ăn xong vứt ngay.",
   },
   {
     title: "Không mang “công thức” đi nơi khác & không thương mại hóa",
