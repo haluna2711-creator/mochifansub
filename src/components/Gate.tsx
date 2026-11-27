@@ -326,12 +326,6 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
           {sb && view === "signup" && (
             <form onSubmit={onSignup} className="mt-5">
               <h3 className="font-display text-lg font-extrabold">Tạo tài khoản</h3>
-              {/* Chỉ báo khi đã hết lượt; còn lượt thì không hiện bộ đếm */}
-              {full && (
-                <p className="mt-1 inline-block rounded-full bg-sakura/25 px-3 py-0.5 text-xs font-extrabold text-sakura-deep">
-                  Hết lượt hôm nay
-                </p>
-              )}
               {full ? (
                 <p className="mt-4 rounded-xl bg-sakura-deep/15 px-4 py-3 text-sm font-bold text-sakura-deep">
                   {SIGNUP_ERRORS.full}
