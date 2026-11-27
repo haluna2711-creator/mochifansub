@@ -2,33 +2,23 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { COMMENT_MAX, NAME_MAX, type PublicComment } from "@/lib/comments";
-import { hueFrom, timeAgo } from "@/lib/utils";
+import { timeAgo } from "@/lib/utils";
 import { getBrowserSupabase } from "@/lib/supabase";
+import Link from "next/link";
 import { MochiFace } from "@/components/MochiLogo";
+import { UserAvatar } from "@/components/UserAvatar";
 
 const NAME_KEY = "mochi-comment-name";
 const PAGE = 20;
 
-function Avatar({ name, admin = false }: { name: string; admin?: boolean }) {
-  // Admin: dùng logo viên mochi của tiệm thay cho chữ cái đầu
-  if (admin) {
-    return (
-      <span
-        aria-hidden
-        className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white ring-1 ring-sakura-deep/30"
-      >
-        <MochiFace className="h-7 w-7" />
-      </span>
-    );
-  }
-  const h = hueFrom(name);
+/** Avatar của admin: logo viên mochi của tiệm */
+function AdminAvatar() {
   return (
     <span
       aria-hidden
-      className="grid h-10 w-10 shrink-0 place-items-center rounded-full font-display text-base font-black text-white"
-      style={{ background: `hsl(${h} 65% 68%)` }}
+      className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white ring-1 ring-sakura-deep/30"
     >
-      {(name.trim()[0] ?? "?").toUpperCase()}
+      <MochiFace className="h-7 w-7" />
     </span>
   );
 }
@@ -42,6 +32,7 @@ export function CommentSection({ releaseId }: { releaseId: string }) {
   const [disabled, setDisabled] = useState(false);
 
   const [name, setName] = useState("");
+  const [member, setMember] = useState(false); // đã đăng nhập: tên lấy từ hồ sơ
   const [content, setContent] = useState("");
   const [website, setWebsite] = useState(""); // honeypot
   const [busy, setBusy] = useState(false);
@@ -72,6 +63,7 @@ export function CommentSection({ releaseId }: { releaseId: string }) {
     sb?.auth.getSession().then(async ({ data }) => {
       const u = data.session?.user;
       if (!u) return;
+      setMember(true);
       const { data: p } = await sb.from("profiles").select("username").eq("id", u.id).maybeSingle();
       const n = p?.username || (u.user_metadata?.username as string | undefined);
       if (n) setName(n);
@@ -88,9 +80,10 @@ export function CommentSection({ releaseId }: { releaseId: string }) {
     setBusy(true);
     setMsg(null);
     try {
+      const token = (await getBrowserSupabase()?.auth.getSession())?.data.session?.access_token;
       const res = await fetch("/api/comments", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}) },
         body: JSON.stringify({ release_id: releaseId, name, content, website }),
       });
       const json = await res.json().catch(() => ({}));
@@ -137,6 +130,8 @@ export function CommentSection({ releaseId }: { releaseId: string }) {
             value={name}
             maxLength={NAME_MAX}
             onChange={(e) => setName(e.target.value)}
+            readOnly={member}
+            title={member ? "Tên lấy từ hồ sơ của bạn" : undefined}
             placeholder="Tên của bạn (không bắt buộc)"
             autoComplete="nickname"
             aria-label="Tên của bạn"
@@ -172,6 +167,11 @@ export function CommentSection({ releaseId }: { releaseId: string }) {
             {busy ? "Đang gửi…" : "Gửi cảm nhận"}
           </button>
           <span className="text-xs text-muted">{content.length}/{COMMENT_MAX}</span>
+          {member && (
+            <Link href="/profile" className="text-xs font-bold text-sakura-deep underline underline-offset-2">
+              Đổi tên / ảnh đại diện
+            </Link>
+          )}
           {msg && (
             <span
               role="status"
@@ -194,7 +194,7 @@ export function CommentSection({ releaseId }: { releaseId: string }) {
           items.map((c) => (
             <article key={c.id} className="rounded-3xl bg-surface p-4 ring-1 ring-line sm:p-5">
               <div className="flex gap-3">
-                <Avatar name={c.author_name} />
+                <UserAvatar name={c.author_name} src={c.avatar_url} className="h-10 w-10 text-base" />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline gap-x-2">
                     <span className="font-extrabold">{c.author_name}</span>
@@ -208,7 +208,7 @@ export function CommentSection({ releaseId }: { releaseId: string }) {
 
               {c.reply && (
                 <div className="mt-3 flex gap-3 rounded-2xl bg-matcha/10 p-3 ring-1 ring-matcha/30 sm:ml-12">
-                  <Avatar name="Tiệm bánh Mochi" admin />
+                  <AdminAvatar />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-x-2">
                       <span className="font-extrabold">Tiệm bánh Mochi</span>
