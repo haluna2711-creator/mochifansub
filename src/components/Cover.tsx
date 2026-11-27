@@ -14,10 +14,12 @@ interface Props {
   showTitle?: boolean;
   /** Chất lượng nén khi Next tối ưu ảnh (mặc định 90, cần có trong images.qualities). */
   quality?: 75 | 90;
+  /** Vùng ảnh được giữ khi bị cắt, dạng object-position (vd "50% 20%" = giữ phần trên nhiều hơn). */
+  position?: string;
 }
 
 /** Ảnh bìa phim; nếu chưa có ảnh sẽ hiện bìa pastel kiểu mochi tự sinh. */
-export function Cover({ src, title, titleJp, sizes, priority, className = "", variant = "poster", showTitle = true, quality = 90 }: Props) {
+export function Cover({ src, title, titleJp, sizes, priority, className = "", variant = "poster", showTitle = true, quality = 90, position }: Props) {
   if (src) {
     return (
       <Image
@@ -27,6 +29,7 @@ export function Cover({ src, title, titleJp, sizes, priority, className = "", va
         sizes={sizes}
         quality={quality}
         priority={priority}
+        style={position ? { objectPosition: position } : undefined}
         className={`object-cover ${className}`}
       />
     );
