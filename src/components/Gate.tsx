@@ -39,7 +39,7 @@ const TERMS: { title: string; body: string; penalty?: string }[] = [
   },
   {
     title: "“Ăn bánh nhớ giữ lửa”",
-    body: "Bánh ở tiệm được làm theo hình thức chia sẻ ngang hàng. Sau khi nhận bánh xong, vui lòng giữ nguyên “vỏ túi bánh” trong ứng dụng ít nhất 24–48 giờ hoặc đạt tỷ lệ chia sẻ tối thiểu 1.0 để những vị khách đến sau cũng có thể thưởng thức trọn vẹn. Tránh tình trạng ăn xong vứt ngay.",
+    body: "Bánh ở tiệm được làm theo hình thức chia sẻ ngang hàng. Sau khi nhận bánh xong, vui lòng giữ nguyên “vỏ túi bánh” trong nhà ít nhất 24–48 giờ hoặc đạt tỷ lệ chia sẻ tối thiểu 1.0 để những vị khách đến sau cũng có thể thưởng thức trọn vẹn. Tránh tình trạng ăn xong vứt ngay.",
   },
   {
     title: "Không mang “công thức” đi nơi khác & không thương mại hóa",
@@ -52,6 +52,10 @@ const TERMS: { title: string; body: string; penalty?: string }[] = [
   {
     title: "Quyền quyết định cao nhất thuộc về Chủ Tiệm",
     body: "Trong mọi tình huống phát sinh hoặc tranh chấp, quyết định của chủ tiệm là quyết định cuối cùng nhằm bảo vệ sự tồn vong của cả tiệm.",
+  },
+  {
+    title: "30 ngày để ghé tiệm",
+    body: "Khách hàng có 30 ngày để ghé tiệm, sau đó nếu không có lịch sự ghé qua thì khách hàng sẽ bị tước quyền vào tiệm. Trong vòng 2 năm, nếu khách hàng không còn mặn mà ghé tiệm nữa thì khách hàng sẽ được đem đi cấp đông.",
   },
 ];
 const TERMS_NOTE =
