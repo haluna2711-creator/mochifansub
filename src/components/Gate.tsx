@@ -22,6 +22,56 @@ const btnGhost =
   "press mt-3 w-full rounded-full bg-surface-2 py-3 font-extrabold text-ink ring-1 ring-line";
 const linkCls = "font-bold text-sakura-deep underline underline-offset-2";
 
+/** Ô mật khẩu có nút con mắt ở cuối để hiện / ẩn */
+function PasswordField({
+  id,
+  autoComplete,
+  minLength,
+  placeholder,
+}: {
+  id: string;
+  autoComplete: string;
+  minLength?: number;
+  placeholder?: string;
+}) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative">
+      <input
+        id={id}
+        name="password"
+        type={show ? "text" : "password"}
+        required
+        minLength={minLength}
+        autoComplete={autoComplete}
+        placeholder={placeholder}
+        className={`${input} pr-12`}
+      />
+      <button
+        type="button"
+        onClick={() => setShow((v) => !v)}
+        aria-label={show ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+        aria-pressed={show}
+        className="absolute right-1.5 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full text-muted transition hover:text-sakura-deep focus-visible:outline-2 focus-visible:outline-sakura-deep"
+      >
+        {show ? (
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c6.5 0 10 8 10 8a17.3 17.3 0 0 1-3.17 4.19" />
+            <path d="M6.61 6.61A17.1 17.1 0 0 0 2 12s3.5 8 10 8a9.7 9.7 0 0 0 5.39-1.61" />
+            <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+            <path d="m2 2 20 20" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M2 12s3.5-8 10-8 10 8 10 8-3.5 8-10 8-10-8-10-8Z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        )}
+      </button>
+    </div>
+  );
+}
+
 /* ===== NỘI DUNG NỘI QUY TIỆM BÁNH — sửa ở đây ===== */
 const TERMS_TITLE = "Nội quy tiệm bánh";
 const TERMS_INTRO =
@@ -379,7 +429,7 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
                   />
 
                   <label htmlFor="g-pass" className={label}>Mật khẩu</label>
-                  <input id="g-pass" name="password" type="password" required minLength={8} autoComplete="new-password" className={input} />
+                  <PasswordField id="g-pass" minLength={8} autoComplete="new-password" />
 
                   <button
                     type="button"
@@ -426,7 +476,7 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
               <label htmlFor="l-email" className={label}>Email</label>
               <input id="l-email" name="email" type="email" required autoComplete="email" className={input} />
               <label htmlFor="l-pass" className={label}>Mật khẩu</label>
-              <input id="l-pass" name="password" type="password" required autoComplete="current-password" className={input} />
+              <PasswordField id="l-pass" autoComplete="current-password" />
               <button type="submit" disabled={busy} className={btn}>
                 {busy ? "Đang xử lý…" : "Đăng nhập"}
               </button>
@@ -458,7 +508,7 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
             <form onSubmit={onReset} className="mt-5">
               <h3 className="font-display text-lg font-extrabold">Mật khẩu mới</h3>
               <label htmlFor="r-pass" className={label}>Mật khẩu mới</label>
-              <input id="r-pass" name="password" type="password" required minLength={8} autoComplete="new-password" placeholder="Ít nhất 8 ký tự" className={input} />
+              <PasswordField id="r-pass" minLength={8} autoComplete="new-password" placeholder="Ít nhất 8 ký tự" />
               <button type="submit" disabled={busy} className={btn}>
                 {busy ? "Đang lưu…" : "Lưu mật khẩu"}
               </button>
