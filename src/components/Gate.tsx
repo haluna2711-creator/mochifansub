@@ -54,7 +54,7 @@ const TERMS: { title: string; body: string; penalty?: string }[] = [
   },
    {
     title: "30 ngày để ghé tiệm",
-    body: "Khách hàng có 30 ngày để ghé tiệm, sau đó nếu không có lịch sử ghé qua bạn sẽ không còn được cấp phép để ghé tiệm nữa. Trong vòng 2 năm nếu khách hàng không còn mặn mà ghé tiệm thì tài khoản của khách hàng cũng sẽ đem đi bỏ tủ đông.",
+    body: "Khách hàng có 30 ngày để ghé tiệm, sau đó nếu không có lịch sử ghé qua bạn sẽ không còn được cấp phép để ghé tiệm nữa. Trong vòng 2 năm nếu khách hàng không còn mặn mà ghé tiệm thì cũng sẽ đưa khách hàng đi cấp đông.",
   },
 ];
 const TERMS_NOTE =
