@@ -13,6 +13,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button, Field, Spinner, inputCls } from "./ui";
 import { ReleaseEditor } from "./ReleaseEditor";
 import { BackgroundSettings } from "./BackgroundSettings";
+import { GateBackgroundSettings } from "./GateBackgroundSettings";
 import { CommentsManager, countPending } from "./CommentsManager";
 
 type AdminState = "loading" | "anon" | "not-admin" | "admin";
@@ -139,6 +140,7 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
   const [q, setQ] = useState("");
   const [editing, setEditing] = useState<Release | "new" | null>(null);
   const [bgOpen, setBgOpen] = useState(false);
+  const [gateOpen, setGateOpen] = useState(false);
   const [cmtOpen, setCmtOpen] = useState(false);
   const [pending, setPending] = useState(0);
 
@@ -187,6 +189,9 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
             </Button>
             <Button variant="ghost" className="h-10 px-4" onClick={() => setBgOpen(true)}>
               Nền trang
+            </Button>
+            <Button variant="ghost" className="h-10 px-4" onClick={() => setGateOpen(true)}>
+              Nền cổng
             </Button>
             <Button variant="ghost" className="h-10 px-4" onClick={() => sb.auth.signOut()}>
               Thoát
@@ -252,6 +257,7 @@ function Dashboard({ sb, email }: { sb: SupabaseClient; email: string }) {
       </div>
 
       {bgOpen && <BackgroundSettings sb={sb} onClose={() => setBgOpen(false)} />}
+      {gateOpen && <GateBackgroundSettings sb={sb} onClose={() => setGateOpen(false)} />}
 
       {cmtOpen && (
         <CommentsManager
