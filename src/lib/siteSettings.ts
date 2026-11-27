@@ -76,3 +76,40 @@ async function loadBackground(): Promise<SiteBackground> {
 
 // Đổi ở admin sẽ hiện trên trang sau tối đa 60 giây
 export const getBackground = unstable_cache(loadBackground, ["site-background"], { revalidate: 60 });
+
+/* ---------- Nền trang cổng (/gate) ---------- */
+
+export interface GateBackground {
+  /** Link ảnh nền của trang cổng. Rỗng = dùng ảnh mặc định. */
+  url: string;
+  /** Độ tối của lớp phủ màu lên ảnh, 0–80 (cao hơn → chữ trắng dễ đọc hơn). */
+  overlay: number;
+}
+
+export const GATE_BG_KEY = "gate_background";
+export const DEFAULT_GATE_BACKGROUND: GateBackground = { url: "", overlay: 30 };
+export const GATE_DEFAULT_IMAGE = "/assets/default-bg.png";
+
+export function sanitizeGateBackground(raw: unknown): GateBackground {
+  const r = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
+  return { url: cleanBackgroundUrl(r.url), overlay: num(r.overlay, 0, 80, DEFAULT_GATE_BACKGROUND.overlay) };
+}
+
+/** Lớp phủ màu hồng đậm, đậm hơn ở đỉnh và đáy để tiêu đề và nút cuộn luôn rõ. */
+export function gateOverlayCss(overlay: number): string {
+  const a = Math.min(80, Math.max(0, overlay)) / 100;
+  const top = Math.min(0.9, a * 0.85).toFixed(3);
+  const bottom = Math.min(0.9, a * 1.3).toFixed(3);
+  return `linear-gradient(to bottom, rgba(122,60,80,${top}) 0%, rgba(122,60,80,0) 50%, rgba(122,60,80,${bottom}) 100%)`;
+}
+
+async function loadGateBackground(): Promise<GateBackground> {
+  const sb = getServerSupabase();
+  if (!sb) return DEFAULT_GATE_BACKGROUND;
+  const { data, error } = await sb.from("site_settings").select("value").eq("key", GATE_BG_KEY).maybeSingle();
+  if (error || !data) return DEFAULT_GATE_BACKGROUND;
+  return sanitizeGateBackground(data.value);
+}
+
+// Đổi ở admin sẽ hiện ở trang cổng sau tối đa 60 giây
+export const getGateBackground = unstable_cache(loadGateBackground, ["gate-background"], { revalidate: 60 });
