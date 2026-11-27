@@ -4,19 +4,31 @@ import { useCallback, useEffect, useState } from "react";
 import { COMMENT_MAX, NAME_MAX, type PublicComment } from "@/lib/comments";
 import { hueFrom, timeAgo } from "@/lib/utils";
 import { getBrowserSupabase } from "@/lib/supabase";
+import { MochiFace } from "@/components/MochiLogo";
 
 const NAME_KEY = "mochi-comment-name";
 const PAGE = 20;
 
 function Avatar({ name, admin = false }: { name: string; admin?: boolean }) {
+  // Admin: dùng logo viên mochi của tiệm thay cho chữ cái đầu
+  if (admin) {
+    return (
+      <span
+        aria-hidden
+        className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white ring-1 ring-sakura-deep/30"
+      >
+        <MochiFace className="h-7 w-7" />
+      </span>
+    );
+  }
   const h = hueFrom(name);
   return (
     <span
       aria-hidden
       className="grid h-10 w-10 shrink-0 place-items-center rounded-full font-display text-base font-black text-white"
-      style={{ background: admin ? "var(--matcha-deep)" : `hsl(${h} 65% 68%)` }}
+      style={{ background: `hsl(${h} 65% 68%)` }}
     >
-      {admin ? "🍡" : (name.trim()[0] ?? "?").toUpperCase()}
+      {(name.trim()[0] ?? "?").toUpperCase()}
     </span>
   );
 }
@@ -196,10 +208,10 @@ export function CommentSection({ releaseId }: { releaseId: string }) {
 
               {c.reply && (
                 <div className="mt-3 flex gap-3 rounded-2xl bg-matcha/10 p-3 ring-1 ring-matcha/30 sm:ml-12">
-                  <Avatar name="Tiệm Mochi" admin />
+                  <Avatar name="Tiệm bánh Mochi" admin />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-x-2">
-                      <span className="font-extrabold">Tiệm Mochi</span>
+                      <span className="font-extrabold">Tiệm bánh Mochi</span>
                       <span className="rounded-full bg-matcha/25 px-2 py-0.5 text-[0.65rem] font-extrabold text-matcha-deep">
                         Admin
                       </span>
