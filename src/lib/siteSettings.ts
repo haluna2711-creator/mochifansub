@@ -88,7 +88,7 @@ export interface GateBackground {
 
 export const GATE_BG_KEY = "gate_background";
 export const DEFAULT_GATE_BACKGROUND: GateBackground = { url: "", overlay: 30 };
-export const GATE_DEFAULT_IMAGE = "/assets/default-bg.png";
+export const GATE_DEFAULT_IMAGE = "/assets/default-bg.webp";
 
 export function sanitizeGateBackground(raw: unknown): GateBackground {
   const r = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
