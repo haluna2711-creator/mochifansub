@@ -67,6 +67,7 @@ const SIGNUP_ERRORS: Record<string, string> = {
   blocked: "Email này đã bị khóa, không thể đăng ký lại.",
   taken: "Tên này đã có người dùng. Hãy chọn tên khác.",
   exists: "Email này đã có tài khoản. Hãy đăng nhập.",
+  closed: "Tiệm tạm ngưng nhận khách mới. Bạn quay lại sau nhé!",
 };
 
 export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number }) {
@@ -77,6 +78,7 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
   const [msg, setMsg] = useState<Msg | null>(null);
   const [busy, setBusy] = useState(false);
   const [quota, setQuota] = useState<Quota>(null);
+  const [signupOpen, setSignupOpen] = useState(true);
   const [agree, setAgree] = useState(false);
   const [username, setUsername] = useState("");
   const dlg = useRef<HTMLDialogElement>(null);
@@ -134,6 +136,9 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
 
   const loadQuota = useCallback(async () => {
     if (!sb) return;
+    // Admin có thể đóng đăng ký; lỗi hoặc chưa chạy SQL → coi như đang mở (DB vẫn chặn nếu thật sự đóng)
+    const { data: open } = await sb.rpc("signup_open");
+    setSignupOpen(open !== false);
     const { data, error } = await sb.rpc("signup_status");
     if (error || !data) return setQuota("error");
     setQuota({ remaining: Number(data.remaining), limit: Number(data.limit) });
@@ -165,6 +170,14 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
     setBusy(true);
     setMsg(null);
 
+    const { data: open } = await sb.rpc("signup_open");
+    if (open === false) {
+      setBusy(false);
+      setSignupOpen(false);
+      setMsg({ text: SIGNUP_ERRORS.closed, ok: false });
+      return;
+    }
+
     const { data: st } = await sb.rpc("check_signup", { p_email: email, p_username: name });
     if (typeof st === "string" && st !== "ok") {
       setBusy(false);
@@ -180,7 +193,9 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
     });
     setBusy(false);
     if (error) {
-      setMsg({ text: `Đăng ký chưa được: ${error.message}`, ok: false });
+      const closed = /signup_closed/i.test(error.message);
+      if (closed) setSignupOpen(false);
+      setMsg({ text: closed ? SIGNUP_ERRORS.closed : `Đăng ký chưa được: ${error.message}`, ok: false });
       loadQuota();
       return;
     }
@@ -330,7 +345,11 @@ export function Gate({ bgUrl, overlay = 30 }: { bgUrl: string; overlay?: number 
           {sb && view === "signup" && (
             <form onSubmit={onSignup} className="mt-5">
               <h3 className="font-display text-lg font-extrabold">Tạo tài khoản</h3>
-              {full ? (
+              {!signupOpen ? (
+                <p className="mt-4 rounded-xl bg-sakura-deep/15 px-4 py-3 text-sm font-bold text-sakura-deep">
+                  {SIGNUP_ERRORS.closed}
+                </p>
+              ) : full ? (
                 <p className="mt-4 rounded-xl bg-sakura-deep/15 px-4 py-3 text-sm font-bold text-sakura-deep">
                   {SIGNUP_ERRORS.full}
                 </p>
